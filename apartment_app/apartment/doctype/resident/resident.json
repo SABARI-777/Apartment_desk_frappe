@@ -1,0 +1,147 @@
+{
+ "actions": [],
+ "allow_bulk_edit": 1,
+ "allow_rename": 1,
+ "autoname": "format:APT-{category}-{####}",
+ "creation": "2026-07-22 11:17:17.470548",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "resident_section",
+  "user_name",
+  "moble_number",
+  "email",
+  "apartment_name",
+  "resident_number",
+  "block",
+  "resident_id",
+  "problems",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "fieldname": "resident_section",
+   "fieldtype": "Section Break",
+   "label": "Resident"
+  },
+  {
+   "fieldname": "user_name",
+   "fieldtype": "Data",
+   "label": "user_name"
+  },
+  {
+   "fieldname": "apartment_name",
+   "fieldtype": "Link",
+   "label": "apartment_name",
+   "options": "apartment_details"
+  },
+  {
+   "fieldname": "resident_number",
+   "fieldtype": "Data",
+   "label": "Resident_number"
+  },
+  {
+   "fieldname": "block",
+   "fieldtype": "Select",
+   "label": "block",
+   "options": "A\nB\nC\nD"
+  },
+  {
+   "fieldname": "moble_number",
+   "fieldtype": "Phone",
+   "label": "moble_number"
+  },
+  {
+   "fieldname": "problems",
+   "fieldtype": "Table",
+   "label": "problems",
+   "options": "problems"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Resident",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "email",
+   "fieldtype": "Data",
+   "label": "email"
+  },
+  {
+   "fieldname": "resident_id",
+   "fieldtype": "Data",
+   "label": "resident_id"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2026-07-24 11:08:36.676260",
+ "modified_by": "Administrator",
+ "module": "Apartment",
+ "name": "Resident",
+ "naming_rule": "Expression (old style)",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "User",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Technician",
+   "share": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Faculty",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "track_seen": 1,
+ "track_views": 1
+}

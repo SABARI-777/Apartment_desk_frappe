@@ -1,0 +1,90 @@
+{
+ "actions": [],
+ "allow_bulk_edit": 1,
+ "allow_rename": 1,
+ "creation": "2026-07-22 11:25:29.794429",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "problem_id",
+  "problem",
+  "category",
+  "date_time",
+  "due_time",
+  "completed_date",
+  "status",
+  "remarks"
+ ],
+ "fields": [
+  {
+   "columns": 6,
+   "fieldname": "problem",
+   "fieldtype": "Small Text",
+   "in_list_view": 1,
+   "label": "Problem"
+  },
+  {
+   "columns": 1,
+   "fieldname": "date_time",
+   "fieldtype": "Datetime",
+   "in_list_view": 1,
+   "label": "Complaint_on_date"
+  },
+  {
+   "columns": 1,
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "status",
+   "options": "pending\ninprogress\ncompleted"
+  },
+  {
+   "columns": 2,
+   "fieldname": "remarks",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "remarks"
+  },
+  {
+   "fieldname": "problem_id",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "problem_id"
+  },
+  {
+   "fieldname": "completed_date",
+   "fieldtype": "Datetime",
+   "in_list_view": 1,
+   "label": "completed_date"
+  },
+  {
+   "fieldname": "due_time",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "due_time"
+  },
+  {
+   "fieldname": "category",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "category",
+   "options": "Plumbing\nElectrical\nTech\nGas\nCleaning Services"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2026-07-24 11:10:13.917804",
+ "modified_by": "Administrator",
+ "module": "Apartment",
+ "name": "problems",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}
