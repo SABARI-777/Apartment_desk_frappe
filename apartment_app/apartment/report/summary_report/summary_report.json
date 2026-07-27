@@ -1,0 +1,38 @@
+{
+ "add_total_row": 0,
+ "add_translate_data": 0,
+ "columns": [],
+ "creation": "2026-07-27 17:47:51.455159",
+ "disable_prepared_report_automation": 0,
+ "disabled": 0,
+ "docstatus": 0,
+ "doctype": "Report",
+ "doctype_to_sync": [],
+ "filters": [],
+ "idx": 0,
+ "is_standard": "Yes",
+ "letter_head": null,
+ "modified": "2026-07-27 17:47:51.455159",
+ "modified_by": "Administrator",
+ "module": "Apartment",
+ "name": "summary_report",
+ "owner": "Administrator",
+ "prepared_report": 0,
+ "query": "SELECT\n\n    r.user_name AS \"Resident:Data:180\",\n    r.resident_id AS \"Resident ID:Data:120\",\n\n    a.apartment_name AS \"Apartment:Data:180\",\n    a.place AS \"Place:Data:150\",\n\n    p.problem_id AS \"Problem ID:Data:120\",\n    p.problem AS \"Problem:Data:250\",\n    p.category AS \"Category:Data:120\",\n    p.status AS \"Problem Status:Data:120\",\n\n    ta.technicians AS \"Assigned Technician:Data:180\",\n    ta.status AS \"Faculty Status:Data:120\",\n    ta.priority AS \"Priority:Data:100\",\n\n    t.category AS \"Technician Category:Data:120\",\n    t.phone AS \"Technician Phone:Data:120\"\n\nFROM `tabResident` r\n\nLEFT JOIN `tabapartment_details` a\nON a.name=r.apartment_name\n\nLEFT JOIN `tabproblems` p\nON p.parent=r.name\n\nLEFT JOIN `tabTASK-ASSIGN` ta\nON ta.problem_id=p.problem_id\n\nLEFT JOIN `tabTechnician` t\nON t.name=ta.technicians\n\nORDER BY\nr.user_name;",
+ "ref_doctype": "Resident",
+ "report_name": "summary_report",
+ "report_type": "Query Report",
+ "roles": [
+  {
+   "role": "System Manager"
+  },
+  {
+   "role": "Faculty"
+  },
+  {
+   "role": "User"
+  }
+ ],
+ "snapshot_report": 0,
+ "timeout": 0
+}

@@ -68,15 +68,10 @@ function open_add_problem_dialog() {
         label: "Category",
         fieldname: "category",
         fieldtype: "Select",
-        options: "\nElectrical\Gas\nPlumbing\nCleaning service\nTech\nOther",
+        options: "\nElectrical\nGas\nPlumbing\nCleaning service\nTech\nOther",
         reqd: 1
     },
-     {
-        label: "Due date",
-        fieldname: "due_date",
-        fieldtype: "Date",
-         reqd: 1
-    }
+      
 ],
 
         primary_action_label: "Submit",
@@ -87,7 +82,7 @@ function open_add_problem_dialog() {
             args: {
                 problem: values.problem,
                 category:values.category,
-                due_date:values.due_date
+                
             },
             callback: function (r) {
                 if (r.message) {
@@ -123,8 +118,7 @@ function open_add_problem_dialog() {
 						<th>Complaint Date</th>
 						<th>Due Date</th>
 						<th>Completed Date</th>
-						<th>Remarks</th>
-					</tr>
+ 					</tr>
 				</thead>
 				<tbody>
 			`;
@@ -140,8 +134,7 @@ function open_add_problem_dialog() {
 						<td>${p.date_time || "-"}</td>
 						<td>${p.due_time || "-"}</td>
 						<td>${p.completed_date || "-"}</td>
-						<td>${p.remarks || "-"}</td>
-					</tr>
+ 					</tr>
 				`;
 
 			});
@@ -165,6 +158,8 @@ function open_add_problem_dialog() {
         }
     }
 });
+
+
 function show_resident_details(resident) {
 
     let html = `

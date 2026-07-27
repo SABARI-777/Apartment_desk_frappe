@@ -30,11 +30,11 @@ class Technician(Document):
         frappe.msgprint("Complaint Status Updated")
 
 
-@frappe.whitelist()
+@frappe.whitelist(allow_guest=True)
 def get_Technician_count():
     return frappe.db.count("Technician")
     
-@frappe.whitelist()
+@frappe.whitelist(allow_guest=True)
 def totalservice():
     meta = frappe.get_meta("Technician")
 
@@ -47,7 +47,7 @@ def totalservice():
         "categories": categories
     }
 
-@frappe.whitelist()
+@frappe.whitelist(allow_guest=True)
 def get_category_count():
     return frappe.db.sql("""
         SELECT category, COUNT(name) AS count

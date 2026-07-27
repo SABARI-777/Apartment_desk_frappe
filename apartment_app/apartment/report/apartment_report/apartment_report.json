@@ -1,0 +1,35 @@
+{
+ "add_total_row": 0,
+ "add_translate_data": 0,
+ "columns": [],
+ "creation": "2026-07-27 17:46:43.954949",
+ "disable_prepared_report_automation": 0,
+ "disabled": 0,
+ "docstatus": 0,
+ "doctype": "Report",
+ "doctype_to_sync": [],
+ "filters": [],
+ "idx": 0,
+ "is_standard": "Yes",
+ "letter_head": null,
+ "modified": "2026-07-27 17:46:43.954949",
+ "modified_by": "Administrator",
+ "module": "Apartment",
+ "name": "apartment_report",
+ "owner": "Administrator",
+ "prepared_report": 0,
+ "query": "SELECT\n\n    a.apartment_name AS \"Apartment:Data:180\",\n    a.place AS \"Place:Data:150\",\n    a.address AS \"Address:Data:220\",\n\n    an.message AS \"Announcement:Data:300\",\n    an.from_date AS \"From:Datetime:160\",\n    an.to_date AS \"To:Datetime:160\"\n\nFROM `tabapartment_details` a\n\nLEFT JOIN `tabannouncement` an\nON an.parent=a.name\n\nORDER BY\na.apartment_name;",
+ "ref_doctype": "apartment_details",
+ "report_name": "apartment_report",
+ "report_type": "Query Report",
+ "roles": [
+  {
+   "role": "System Manager"
+  },
+  {
+   "role": "Faculty"
+  }
+ ],
+ "snapshot_report": 0,
+ "timeout": 0
+}

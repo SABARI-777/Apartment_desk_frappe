@@ -14,16 +14,28 @@ def check_resident():
     frappe.errprint(f"Resident found: {resident}")
 
     return resident
-
 @frappe.whitelist()
-def get_resident_details():
+def get_resident_details(name=None):
 
-    resident = frappe.get_doc(
+    if name:
+        return frappe.db.get_value(
+            "Resident",
+            name,
+            [
+                "user_name",
+                "moble_number",
+                "apartment_name",
+                "resident_number",
+                "block",
+                "resident_id"
+            ],
+            as_dict=True
+        )
+
+    return frappe.get_doc(
         "Resident",
         {"email": frappe.session.user}
     )
-
-    return resident
     
 @frappe.whitelist()
 def get_problems():
@@ -35,7 +47,7 @@ def get_problems():
     return resident.problems
 
 @frappe.whitelist()
-def add_problem(problem,category,due_date):
+def add_problem(problem,category):
 
     resident_name = frappe.db.get_value(
         "Resident",
@@ -50,11 +62,11 @@ def add_problem(problem,category,due_date):
     row = resident.append("problems", {})
 
     count = len(resident.problems) + 1
-    row.problem_id = f"P{count:03d}"
+    row.problem_id = resident.email +" "+f"P{count:03d}"
+    
     row.problem = problem
     row.category = category
-    row.due_time = due_date
-
+ 
     row.status = "pending"
     row.date_time = now_datetime()
 

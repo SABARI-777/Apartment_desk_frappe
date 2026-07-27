@@ -36,6 +36,6 @@ class Faculty(Document):
 
 
 
-@frappe.whitelist()
+@frappe.whitelist(allow_guest=True)
 def get_faculty_count():
     return frappe.db.count("Faculty")

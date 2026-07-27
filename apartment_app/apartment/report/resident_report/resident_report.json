@@ -1,0 +1,48 @@
+{
+ "add_total_row": 0,
+ "add_translate_data": 0,
+ "columns": [],
+ "creation": "2026-07-27 17:00:24.930274",
+ "disable_prepared_report_automation": 0,
+ "disabled": 0,
+ "docstatus": 0,
+ "doctype": "Report",
+ "doctype_to_sync": [],
+ "filters": [
+  {
+   "fieldname": " Apartment_Name ",
+   "fieldtype": "Link",
+   "label": "Apartment Name",
+   "mandatory": 0,
+   "options": "Apartment_details",
+   "wildcard_filter": 0
+  }
+ ],
+ "idx": 0,
+ "is_standard": "Yes",
+ "json": "{}",
+ "letter_head": null,
+ "modified": "2026-07-27 17:44:21.460678",
+ "modified_by": "Administrator",
+ "module": "Apartment",
+ "name": "resident_report",
+ "owner": "Administrator",
+ "prepared_report": 0,
+ "query": "SELECT\n    r.resident_id AS \"Resident ID:Data:120\",\n    r.user_name AS \"Resident Name:Data:180\",\n    r.email AS \"Email:Data:200\",\n    r.moble_number AS \"Mobile:Data:120\",\n    r.block AS \"Block:Data:80\",\n\n    a.apartment_name AS \"Apartment:Data:180\",\n    a.place AS \"Place:Data:150\",\n    a.address AS \"Address:Data:220\",\n\n    p.problem_id AS \"Problem ID:Data:120\",\n    p.problem AS \"Problem:Data:250\",\n    p.category AS \"Category:Data:120\",\n    p.status AS \"Status:Data:120\",\n    p.date_time AS \"Complaint Date:Datetime:160\",\n    p.due_time AS \"Due Date:Date:120\",\n    p.completed_date AS \"Completed Date:Datetime:160\"\n\nFROM `tabResident` r\n\nLEFT JOIN `tabapartment_details` a\nON a.name = r.apartment_name\n\nLEFT JOIN `tabproblems` p\nON p.parent = r.name\n\nORDER BY r.user_name;",
+ "ref_doctype": "Resident",
+ "report_name": "resident_report",
+ "report_type": "Query Report",
+ "roles": [
+  {
+   "role": "System Manager"
+  },
+  {
+   "role": "Faculty"
+  },
+  {
+   "role": "User"
+  }
+ ],
+ "snapshot_report": 0,
+ "timeout": 0
+}

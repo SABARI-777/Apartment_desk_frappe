@@ -5,6 +5,6 @@ class Resident(Document):
     pass
 
 
-@frappe.whitelist()
+@frappe.whitelist(allow_guest=True)
 def get_residents_count():
     return frappe.db.count("Resident")

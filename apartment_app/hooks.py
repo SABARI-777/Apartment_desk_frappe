@@ -255,8 +255,3 @@ app_license = "mit"
 # ------------
 # List of apps whose translatable strings should be excluded from this app's translations.
 # ignore_translatable_strings_from = []
-
-# on_session_creation = [
-#     "apartment_app.api.redirect_after_login"
-# ]
-# app_include_js = "/assets/apartment_app/js/login_redirect.js"

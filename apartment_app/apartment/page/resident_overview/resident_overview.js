@@ -99,8 +99,8 @@ frappe.pages['resident-overview'].on_page_load = function (wrapper) {
 
 	<div class="mt-3">
     <h3> Apartment Announcements</h3>
-    <div id="announce2">Loading...</div>
-</div>
+    <h4 id="announce2"></h4>
+ </div>
 
 </div>
 

@@ -1,0 +1,66 @@
+{% extends "templates/web.html" %}
+
+{% block page_content %}
+
+<link rel="stylesheet" href="/assets/apartment_app/css/resident_overview.css">
+
+<div class="overview-container">
+
+    <h3>Resident Overview</h3>
+
+    <table class="summary-table">
+        <thead>
+            <tr>
+                <th>Details</th>
+                <th>Count</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            <tr>
+                <td>Total Residents</td>
+                <td id="count1">Loading...</td>
+            </tr>
+
+            <tr>
+                <td>Total Technicians</td>
+                <td id="count2">Loading...</td>
+            </tr>
+
+            <tr>
+                <td>Total Faculties</td>
+                <td id="count3">Loading...</td>
+            </tr>
+
+        </tbody>
+    </table>
+
+    <div class="category-card">
+
+        <h4>
+            Service Providing
+            (<span id="total_count">0</span>)
+        </h4>
+
+        <div id="category_list"></div>
+
+    </div>
+
+    <div class="mt-4">
+
+        <h3>Apartment Announcements</h3>
+
+        <div id="announce2">
+
+            Loading...
+
+        </div>
+
+    </div>
+
+</div>
+
+<script src="/assets/apartment_app/js/resident_overview.js"></script>
+
+{% endblock %}

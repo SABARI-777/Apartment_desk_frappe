@@ -24,7 +24,7 @@
    "fieldtype": "Link",
    "label": "Amended From",
    "no_copy": 1,
-   "options": "Apartment_details",
+   "options": "apartment_details",
    "print_hide": 1,
    "read_only": 1,
    "search_index": 1
@@ -55,7 +55,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-07-23 15:17:27.405574",
+ "modified": "2026-07-27 12:14:32.669980",
  "modified_by": "Administrator",
  "module": "Apartment",
  "name": "apartment_details",
@@ -73,6 +73,18 @@
    "role": "System Manager",
    "share": 1,
    "submit": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Faculty",
+   "share": 1,
    "write": 1
   }
  ],
