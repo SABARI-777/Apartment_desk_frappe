@@ -2,65 +2,89 @@
 
 {% block page_content %}
 
+ 
 <link rel="stylesheet" href="/assets/apartment_app/css/resident_overview.css">
 
 <div class="overview-container">
 
-    <h3>Resident Overview</h3>
+    <div class="page-title">Resident Overview</div>
+    <div class="page-subtitle"></div>
 
-    <table class="summary-table">
-        <thead>
-            <tr>
-                <th>Details</th>
-                <th>Count</th>
-            </tr>
-        </thead>
+    <div class="metric-row">
 
-        <tbody>
+        <div class="metric-card">
+            <div class="metric-info">
+                <h6>Total Residents</h6>
+                <h3 id="count1">...</h3>
+            </div>
 
-            <tr>
-                <td>Total Residents</td>
-                <td id="count1">Loading...</td>
-            </tr>
+            <div class="metric-icon icon-blue">
+                <i class="fa fa-users"></i>
+            </div>
+        </div>
 
-            <tr>
-                <td>Total Technicians</td>
-                <td id="count2">Loading...</td>
-            </tr>
+        <div class="metric-card">
+            <div class="metric-info">
+                <h6>Total Technicians</h6>
+                <h3 id="count2">...</h3>
+            </div>
 
-            <tr>
-                <td>Total Faculties</td>
-                <td id="count3">Loading...</td>
-            </tr>
+            <div class="metric-icon icon-green">
+                <i class="fa fa-wrench"></i>
+            </div>
+        </div>
 
-        </tbody>
-    </table>
+        <div class="metric-card">
+            <div class="metric-info">
+                <h6>Total Faculties</h6>
+                <h3 id="count3">...</h3>
+            </div>
 
-    <div class="category-card">
+            <div class="metric-icon icon-orange">
+                <i class="fa fa-graduation-cap"></i>
+            </div>
+        </div>
 
-        <h4>
-            Service Providing
-            (<span id="total_count">0</span>)
-        </h4>
+        <div class="metric-card">
+            <div class="metric-info">
+                <h6>Service Providing</h6>
+                <h3 id="total_count">0</h3>
+            </div>
 
-        <div id="category_list"></div>
+            <div class="metric-icon icon-red">
+                <i class="fa fa-cogs"></i>
+            </div>
+        </div>
 
     </div>
 
-    <div class="mt-4">
+    <div class="content-row">
 
-        <h3>Apartment Announcements</h3>
+        <div class="card">
 
-        <div id="announce2">
+            <div class="card-header">
+                <h5>Service Categories</h5>
+            </div>
 
-            Loading...
+            <div class="card-body">
+                <ul id="category_list" class="category-list"></ul>
+            </div>
+
+        </div>
+
+        <div class="card">
+
+            <div class="card-header">
+                <h5>Apartment Announcements</h5>
+            </div>
+
+            <div class="card-body" id="announce2"></div>
 
         </div>
 
     </div>
 
 </div>
-
 <script src="/assets/apartment_app/js/resident_overview.js"></script>
 
 {% endblock %}

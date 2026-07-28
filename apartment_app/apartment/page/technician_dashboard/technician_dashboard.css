@@ -1,0 +1,185 @@
+:root {
+                    --primary: #1e40af;
+                    --primary-dark: #1e3a8a;
+                    --accent: #3b82f6;
+                    --text-main: #0f172a;
+                    --text-muted: #64748b;
+                    --border: #e2e8f0;
+                    --bg: #f8fafc;
+                    --card-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 10px 15px -3px rgba(0,0,0,0.08);
+                    --card-shadow-hover: 0 12px 24px -6px rgba(0,0,0,0.12);
+                }
+
+                .technician-dashboard {
+                    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+                    background: var(--bg);
+                    min-height: 100vh;
+                    padding: 32px 28px;
+                    color: var(--text-main);
+                }
+
+                .technician-dashboard h1 {
+                    font-family: 'Plus Jakarta Sans', sans-serif;
+                    font-size: 24px;
+                    font-weight: 700;
+                    color: var(--text-main);
+                    margin-bottom: 24px;
+                    letter-spacing: -0.03em;
+                }
+
+                .technician-dashboard h3 {
+                    font-family: 'Plus Jakarta Sans', sans-serif;
+                    font-size: 17px;
+                    font-weight: 600;
+                    color: var(--text-main);
+                    margin: 28px 0 14px 0;
+                    letter-spacing: -0.02em;
+                }
+
+                /* Cards */
+                .card.mb-4 {
+                    background: #ffffff;
+                    border-radius: 16px;
+                    border: 1px solid var(--border);
+                    box-shadow: var(--card-shadow);
+                    margin-bottom: 28px;
+                    overflow: hidden;
+                    transition: box-shadow 0.25s ease;
+                }
+
+                .card.mb-4:hover {
+                    box-shadow: var(--card-shadow-hover);
+                }
+
+                .card-header {
+                    background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%);
+                    color: #ffffff;
+                    padding: 16px 22px;
+                    border-bottom: none;
+                }
+
+                .card-header h4 {
+                    margin: 0;
+                    font-family: 'Plus Jakarta Sans', sans-serif;
+                    font-size: 16px;
+                    font-weight: 600;
+                    color: #ffffff;
+                }
+
+                .card-body {
+                    padding: 22px;
+                }
+
+                .card-body p {
+                    margin-bottom: 12px;
+                    font-size: 14.5px;
+                    display: flex;
+                    align-items: baseline;
+                    gap: 10px;
+                }
+
+                .card-body p:last-child {
+                    margin-bottom: 0;
+                }
+
+                .card-body p b {
+                    min-width: 120px;
+                    font-weight: 600;
+                    color: var(--text-muted);
+                    font-size: 12.5px;
+                    text-transform: uppercase;
+                    letter-spacing: 0.04em;
+                }
+
+                /* Button */
+                #update_status {
+                    background: linear-gradient(135deg, #1e40af, #1e3a8a);
+                    color: #ffffff;
+                    border: none;
+                    border-radius: 12px;
+                    padding: 12px 26px;
+                    font-family: 'Inter', sans-serif;
+                    font-weight: 600;
+                    font-size: 14.5px;
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 8px;
+                    box-shadow: 0 2px 6px rgba(30, 64, 175, 0.3);
+                    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+                    margin-bottom: 20px;
+                }
+
+                #update_status:hover {
+                    background: linear-gradient(135deg, #1e3a8a, #172554);
+                    transform: translateY(-2px);
+                    box-shadow: 0 8px 20px -4px rgba(30, 64, 175, 0.4);
+                }
+
+                /* Tables */
+                #problem_list table,
+                #history_list table {
+                    background: #ffffff;
+                    border-radius: 14px;
+                    overflow: hidden;
+                    border: 1px solid var(--border);
+                    box-shadow: var(--card-shadow);
+                    width: 100%;
+                    border-collapse: separate;
+                    border-spacing: 0;
+                }
+
+                #problem_list thead th,
+                #history_list thead th {
+                    background: #f1f5f9;
+                    color: var(--text-muted);
+                    font-size: 12px;
+                    font-weight: 600;
+                    text-transform: uppercase;
+                    letter-spacing: 0.04em;
+                    padding: 14px 16px;
+                    border-bottom: 1px solid var(--border);
+                    white-space: nowrap;
+                }
+
+                #problem_list tbody td,
+                #history_list tbody td {
+                    padding: 14px 16px;
+                    font-size: 14px;
+                    color: var(--text-main);
+                    border-bottom: 1px solid #f1f5f9;
+                    vertical-align: middle;
+                }
+
+                #problem_list tbody tr:last-child td,
+                #history_list tbody tr:last-child td {
+                    border-bottom: none;
+                }
+
+                #problem_list tbody tr:hover,
+                #history_list tbody tr:hover {
+                    background: #eff6ff;
+                }
+
+                hr {
+                    border: none;
+                    border-top: 1px solid var(--border);
+                    margin: 28px 0;
+                }
+
+                /* Responsive */
+                @media (max-width: 768px) {
+                    .technician-dashboard {
+                        padding: 20px 16px;
+                    }
+                    .card-body p {
+                        flex-direction: column;
+                        gap: 2px;
+                    }
+                    .card-body p b {
+                        min-width: auto;
+                    }
+                    #update_status {
+                        width: 100%;
+                        justify-content: center;
+                    }
+                }

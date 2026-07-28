@@ -1,23 +1,23 @@
-frappe.ready(function () {
+document.addEventListener("DOMContentLoaded", function () {
 
     frappe.call({
         method: "apartment_app.apartment.doctype.resident.resident.get_residents_count",
         callback: function (r) {
-            $("#count1").text(r.message);
+            document.getElementById("count1").textContent = r.message;
         }
     });
 
     frappe.call({
         method: "apartment_app.apartment.doctype.technician.technician.get_Technician_count",
         callback: function (r) {
-            $("#count2").text(r.message);
+            document.getElementById("count2").textContent = r.message;
         }
     });
 
     frappe.call({
         method: "apartment_app.apartment.doctype.faculty.faculty.get_faculty_count",
         callback: function (r) {
-            $("#count3").text(r.message);
+            document.getElementById("count3").textContent = r.message;
         }
     });
 
@@ -25,64 +25,43 @@ frappe.ready(function () {
         method: "apartment_app.apartment.doctype.technician.technician.totalservice",
         callback: function (r) {
 
-            $("#total_count").text(r.message.total_count);
+            document.getElementById("total_count").textContent = r.message.total_count;
 
             let html = "";
 
-            r.message.categories.forEach(function(category){
+            r.message.categories.forEach(function (category) {
 
-                html += `
-                    <div class="category-item">
-                        ${category}
-                    </div>
-                `;
+                html += `<li>${category}</li>`;
 
             });
 
-            $("#category_list").html(html);
+            document.getElementById("category_list").innerHTML = html;
 
         }
     });
 
     frappe.call({
+        method: "apartment_app.apartment.doctype.announcement.announcement.get_announcement_details",
+        callback: function (r) {
 
-        method:"apartment_app.apartment.doctype.announcement.announcement.get_announcement_details",
+            let html = "";
 
-        callback:function(r){
-
-            let html="";
-
-            Object.entries(r.message).forEach(([apartment,announcements])=>{
+            Object.entries(r.message).forEach(([apartment, announcements]) => {
 
                 html += `
-                    <div class="card mb-3">
+                    <div class="announce-card">
 
-                        <div class="card-header">
-
-                            <strong>${apartment} APARTMENT</strong>
-
+                        <div class="announce-header">
+                            ${apartment} APARTMENT
                         </div>
 
-                        <div class="card-body">
+                        <div class="announce-body">
 
-                            <h5>Announcements</h5>
-
-                            ${announcements.map(item=>`
-
-                                <div class="mb-2">
-
+                            ${announcements.map(item => `
+                                <div class="announce-item">
                                     <p>${item.message}</p>
-
-                                    <small class="text-muted">
-
-                                        ${item.from_date}
-                                        -
-                                        ${item.to_date}
-
-                                    </small>
-
+                                    <small>${item.from_date} - ${item.to_date}</small>
                                 </div>
-
                             `).join("")}
 
                         </div>
@@ -92,10 +71,9 @@ frappe.ready(function () {
 
             });
 
-            $("#announce2").html(html);
+            document.getElementById("announce2").innerHTML = html;
 
         }
-
     });
 
 });

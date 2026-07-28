@@ -173,6 +173,7 @@ def get_all_technician():
             "email"
         ]
     )
+
 @frappe.whitelist()
 def get_problem_ids():
 
@@ -200,7 +201,8 @@ def get_problem_ids():
 
                 data.append({
                     "problem_id": row.problem_id,
-                    "resident": resident.name
+                    "resident": resident.name,
+                    "category": row.category
                 })
 
     return data

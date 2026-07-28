@@ -4,34 +4,18 @@ from frappe.utils import now_datetime
 
 @frappe.whitelist()
 def check_resident():
-    frappe.errprint(f"Logged in user: {frappe.session.user}")
 
     resident = frappe.db.exists(
         "Resident",
         {"email": frappe.session.user}
     )
 
-    frappe.errprint(f"Resident found: {resident}")
-
     return resident
+
+
+
 @frappe.whitelist()
-def get_resident_details(name=None):
-
-    if name:
-        return frappe.db.get_value(
-            "Resident",
-            name,
-            [
-                "user_name",
-                "moble_number",
-                "apartment_name",
-                "resident_number",
-                "block",
-                "resident_id"
-            ],
-            as_dict=True
-        )
-
+def get_resident_details():
     return frappe.get_doc(
         "Resident",
         {"email": frappe.session.user}
@@ -45,6 +29,8 @@ def get_problems():
         {"email": frappe.session.user}
     )
     return resident.problems
+
+    
 
 @frappe.whitelist()
 def add_problem(problem,category):
