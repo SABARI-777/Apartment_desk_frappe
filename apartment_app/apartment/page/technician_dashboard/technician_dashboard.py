@@ -21,7 +21,7 @@ def get_technician_details(name=None):
         {"email": frappe.session.user}
     )
 @frappe.whitelist()
-def get_problems(name=None):
+def get_problems(start=0, page_length=10,name=None):
 
     if name:
         technician = frappe.get_doc("Technician", name)
@@ -43,8 +43,16 @@ def get_problems(name=None):
                 "date": row.date,
                 "status": row.status
             })
+    
+    start = int(start)
+    page_length = int(page_length)
 
-    return data
+    total = len(data)
+
+    return {
+        "data": data[start:start + page_length],
+        "total": total
+    }
 
 @frappe.whitelist()
 def get_problem_ids(name=None):
@@ -110,7 +118,7 @@ def update_task(problem_id, resident, status):
 
 
 @frappe.whitelist()
-def get_completed_tasks(name=None):
+def get_completed_tasks(start=0, page_length=10,name=None):
 
     if name:
         technician = frappe.get_doc("Technician", name)
@@ -133,4 +141,12 @@ def get_completed_tasks(name=None):
                 "status": row.status
             })
 
-    return completed
+    start = int(start)
+    page_length = int(page_length)
+
+    total = len(completed)
+
+    return {
+        "data": completed[start:start + page_length],
+        "total": total
+    }

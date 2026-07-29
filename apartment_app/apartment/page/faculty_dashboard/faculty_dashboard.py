@@ -144,9 +144,12 @@ def get_apartments():
 
         
 @frappe.whitelist()
-def get_all_residents():
+def get_all_residents(start=0, page_length=10):
 
-    return frappe.get_list(
+    start = int(start)
+    page_length = int(page_length)
+
+    residents = frappe.get_list(
         "Resident",
         fields=[
             "user_name",
@@ -155,8 +158,17 @@ def get_all_residents():
             "resident_number",
             "block",
             "resident_id"
-        ]
+        ],
+        start=start,
+        page_length=page_length
     )
+
+    total = frappe.db.count("Resident")
+
+    return {
+        "data": residents,
+        "total": total
+    }
 
 
 @frappe.whitelist()

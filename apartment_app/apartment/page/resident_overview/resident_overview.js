@@ -259,28 +259,28 @@ frappe.pages['resident_overview'].on_page_load = function (wrapper) {
 </div>
 `);
 
-     frappe.call({
+    frappe.call({
         method: "apartment_app.apartment.doctype.resident.resident.get_residents_count",
         callback: function (r) {
             $("#count1").text(r.message);
         }
     });
 
-     frappe.call({
+    frappe.call({
         method: "apartment_app.apartment.doctype.technician.technician.get_Technician_count",
         callback: function (r) {
             $("#count2").text(r.message);
         }
     });
 
-     frappe.call({
+    frappe.call({
         method: "apartment_app.apartment.doctype.faculty.faculty.get_faculty_count",
         callback: function (r) {
             $("#count3").text(r.message);
         }
     });
 
-     frappe.call({
+    frappe.call({
         method: "apartment_app.apartment.doctype.technician.technician.totalservice",
         callback: function (r) {
 
@@ -301,15 +301,15 @@ frappe.pages['resident_overview'].on_page_load = function (wrapper) {
         }
     });
 
-	frappe.call({
-    method: "apartment_app.apartment.doctype.announcement.announcement.get_announcement_details",
-    callback: function(r) {
+    frappe.call({
+        method: "apartment_app.apartment.doctype.announcement.announcement.get_announcement_details",
+        callback: function (r) {
 
-        let html = "";
+            let html = "";
 
-        Object.entries(r.message).forEach(([apartment, announcements]) => {
+            Object.entries(r.message).forEach(([apartment, announcements]) => {
 
-            html += `
+                html += `
                 <div class="card mb-3">
                     <div class="card-header">
                         <strong>${apartment} APARTMENT</strong>
@@ -326,9 +326,9 @@ frappe.pages['resident_overview'].on_page_load = function (wrapper) {
                 </div>
             `;
 
-        });
+            });
 
-        $("#announce2").html(html);
-    }
-});
+            $("#announce2").html(html);
+        }
+    });
 };

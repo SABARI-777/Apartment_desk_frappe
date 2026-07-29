@@ -1,17 +1,19 @@
-frappe.pages['resident_dashboard'].on_page_load = function(wrapper) {
+frappe.pages['resident_dashboard'].on_page_load = function (wrapper) {
+    let current_page = 1;
+    const page_length = 10;
     let page = frappe.ui.make_app_page({
         parent: wrapper,
         title: "Resident Dashboard",
         single_column: true
     });
 
-    
+
     frappe.require("/apartment_app/apartment/page/resident_dashboard/resident_dashboard.css");
     frappe.require("/apartment_app/apartment/page/resident_dashboard/resident_dashboard.html");
 
     frappe.call({
         method: "apartment_app.apartment.page.resident_dashboard.resident_dashboard.check_resident",
-        callback: function(r) {
+        callback: function (r) {
             if (r.message) {
                 show_dashboard(page);
             } else {
@@ -21,7 +23,7 @@ frappe.pages['resident_dashboard'].on_page_load = function(wrapper) {
     });
 
     function show_dashboard(page) {
-         $(page.body).html(`
+        $(page.body).html(`
             <div class="resident-dashboard">
                 <div id="resident_details"></div>
                 <div class="action-box">
@@ -36,8 +38,8 @@ frappe.pages['resident_dashboard'].on_page_load = function(wrapper) {
             </div>
         `);
 
-         $("#track_problem").click(function () {
-            load_problems(page);
+        $("#track_problem").click(function () {
+            load_problems();
         });
 
         $("#add_problem").click(function () {
@@ -59,7 +61,7 @@ frappe.pages['resident_dashboard'].on_page_load = function(wrapper) {
                     label: "Category",
                     fieldname: "category",
                     fieldtype: "Select",
-                    options: "\nElectrical\nGas\nPlumbing\nCleaning service\nTech\nOther",
+                    options: "\nElectrical\nGas\nPlumbing\nCleaning Services\nTech\nOther",
                     reqd: 1
                 },
             ],
@@ -86,8 +88,19 @@ frappe.pages['resident_dashboard'].on_page_load = function(wrapper) {
     function load_problems(page) {
         frappe.call({
             method: "apartment_app.apartment.page.resident_dashboard.resident_dashboard.get_problems",
-            callback: function(r) {
-                let problems = r.message;
+            args: {
+                start: (current_page - 1) * page_length,
+                page_length: page_length
+            },
+            callback: function (r) {
+                let problems = r.message.data;
+                let total = r.message.total;
+
+                let total_pages = Math.ceil(total / page_length);
+
+                let start_record = (current_page - 1) * page_length + 1;
+
+                let end_record = Math.min(current_page * page_length, total);
                 let html = `
                     <h3 class="mt-4">My Problems</h3>
                     <table class="table table-bordered table-striped">
@@ -104,7 +117,7 @@ frappe.pages['resident_dashboard'].on_page_load = function(wrapper) {
                         </thead>
                         <tbody>
                 `;
-                problems.forEach(function(p) {
+                problems.forEach(function (p) {
                     html += `
                         <tr>
                             <td>${p.problem_id}</td>
@@ -121,12 +134,76 @@ frappe.pages['resident_dashboard'].on_page_load = function(wrapper) {
                         </tbody>
                     </table>
                 `;
+                html += `
+
+<div class="d-flex justify-content-between align-items-center mt-3">
+
+    <div>
+       
+    </div>
+
+    <div>
+
+        <button
+            class="btn btn-secondary btn-sm"
+            id="prev_page">
+            Previous
+        </button>
+
+        <span class="mx-3 fw-bold">
+            Page ${current_page} of ${total_pages}
+        </span>
+
+        <button
+            class="btn btn-primary btn-sm"
+            id="next_page">
+            Next
+        </button>
+
+    </div>
+
+</div>
+
+`;
                 $("#problem_list").html(html);
+                $("#prev_page").click(function () {
+
+                    if (current_page > 1) {
+
+                        current_page--;
+
+                        load_problems();
+
+                    }
+
+                });
+
+                $("#next_page").click(function () {
+
+                    if (current_page < total_pages) {
+
+                        current_page++;
+
+                        load_problems();
+
+                    }
+
+                });
+
+                $("#prev_page").prop(
+                    "disabled",
+                    current_page == 1
+                );
+
+                $("#next_page").prop(
+                    "disabled",
+                    current_page == total_pages
+                );
             }
         });
     }
 
-     frappe.call({
+    frappe.call({
         method: "apartment_app.apartment.page.resident_dashboard.resident_dashboard.get_resident_details",
         callback: function (r) {
             if (r.message) {
@@ -147,7 +224,7 @@ frappe.pages['resident_dashboard'].on_page_load = function(wrapper) {
                     <p><b>Apartment:</b> ${resident.apartment_name}</p>
                     <p><b>Block:</b> ${resident.block}</p>
                     <p><b>Resident No:</b> ${resident.resident_number}</p>
-                    <p><b>Mobile:</b> ${resident.moble_number }</p>
+                    <p><b>Mobile:</b> ${resident.moble_number}</p>
                     <p><b>Email:</b> ${resident.email}</p>
                 </div>
             </div>

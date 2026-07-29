@@ -1,25 +1,35 @@
 const params = new URLSearchParams(window.location.search);
 const technician_name = params.get("name");
 
-frappe.pages['technician_dashboard'].on_page_load = function(wrapper) {
+frappe.pages['technician_dashboard'].on_page_load = function (wrapper) {
+    let current_page = 1;
+    const page_length = 10;
+
+    let history_page = 1;
+    const history_page_length = 10;
+
     var page = frappe.ui.make_app_page({
         parent: wrapper,
         title: 'Technician Dashboard',
         single_column: true
     });
 
-     
-     frappe.require("/apartment_app/apartment/page/technician_dashboard/technician_dashboard.css");
-     frappe.require("/apartment_app/apartment/page/technician_dashboard/technician_dashboard.html");
+
+    frappe.require("/apartment_app/apartment/page/technician_dashboard/technician_dashboard.css");
+    frappe.require("/apartment_app/apartment/page/technician_dashboard/technician_dashboard.html");
 
     if (technician_name) {
         show_dashboard(page);
+        loadProblems();
+        loadHistory();
     } else {
         frappe.call({
             method: "apartment_app.apartment.page.technician_dashboard.technician_dashboard.check_Technician",
-            callback: function(r) {
+            callback: function (r) {
                 if (r.message) {
                     show_dashboard(page);
+                    loadProblems();
+                    loadHistory();
                 } else {
                     window.location.href = "/technician/new";
                 }
@@ -69,7 +79,7 @@ frappe.pages['technician_dashboard'].on_page_load = function(wrapper) {
         }
     }
 
-     frappe.call({
+    frappe.call({
         method: "apartment_app.apartment.page.technician_dashboard.technician_dashboard.get_technician_details",
         args: {
             name: technician_name
@@ -99,11 +109,19 @@ frappe.pages['technician_dashboard'].on_page_load = function(wrapper) {
         $("#TECHNICIAN_DETAILS").html(html);
     }
 
-    function show_history(history) {
+    function show_history(history, total) {
+
         if (!history || history.length === 0) {
             $("#history_list").html(`<div class="empty-state">No History Available</div>`);
             return;
         }
+        let total_pages = Math.ceil(total / history_page_length);
+
+        let start_record =
+            (history_page - 1) * history_page_length + 1;
+
+        let end_record =
+            Math.min(history_page * history_page_length, total);
 
         let html = `
             <table class="table">
@@ -117,7 +135,7 @@ frappe.pages['technician_dashboard'].on_page_load = function(wrapper) {
                 </thead>
                 <tbody>
         `;
-        history.forEach(function(p) {
+        history.forEach(function (p) {
             html += `
                 <tr>
                     <td>${p.problem_id}</td>
@@ -131,65 +149,233 @@ frappe.pages['technician_dashboard'].on_page_load = function(wrapper) {
                 </tbody>
             </table>
         `;
+        html += `
+<div class="d-flex justify-content-between align-items-center mt-3">
+
+    <div>
+        
+    </div>
+
+    <div>
+
+        <button class="btn btn-secondary btn-sm" id="history_prev">
+            Previous
+        </button>
+
+        <span class="mx-3">
+            Page ${history_page} of ${total_pages}
+        </span>
+
+        <button class="btn btn-primary btn-sm" id="history_next">
+            Next
+        </button>
+
+    </div>
+
+</div>
+`;
         $("#history_list").html(html);
+        $("#history_prev").click(function () {
+
+            if (history_page > 1) {
+
+                history_page--;
+
+                loadHistory();
+
+            }
+
+        });
+
+        $("#history_next").click(function () {
+
+            if (history_page < total_pages) {
+
+                history_page++;
+
+                loadHistory();
+
+            }
+
+        });
+
+        $("#history_prev").prop(
+            "disabled",
+            history_page == 1
+        );
+
+        $("#history_next").prop(
+            "disabled",
+            history_page == total_pages
+        );
     }
 
-     frappe.call({
-        method: "apartment_app.apartment.page.technician_dashboard.technician_dashboard.get_problems",
-        args: {
-            name: technician_name
-        },
-        callback: function(r) {
-            let problems = r.message || [];
-            let html = `
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Problem ID</th>
-                            <th>Resident</th>
-                            <th>LastUpdated Date</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-            `;
-            if (problems.length === 0) {
-                html += `
-                    <tr>
-                        <td colspan="4" style="text-align:center; color:#64748b; padding:30px;">
-                            No active tasks found
-                        </td>
-                    </tr>
-                `;
-            } else {
-                problems.forEach(function(p) {
-                    html += `
-                        <tr>
-                            <td>${p.problem_id}</td>
-                            <td>${p.resident}</td>
-                            <td>${p.date || "-"}</td>
-                            <td>${p.status}</td>
-                        </tr>
-                    `;
-                });
-            }
-            html += `
-                    </tbody>
-                </table>
-            `;
-            $("#problem_list").html(html);
-        }
-    });
+    function loadProblems() {
 
-     frappe.call({
-        method: "apartment_app.apartment.page.technician_dashboard.technician_dashboard.get_completed_tasks",
-        args: {
-            name: technician_name
-        },
-        callback: function(r) {
-            show_history(r.message);
+        frappe.call({
+            method: "apartment_app.apartment.page.technician_dashboard.technician_dashboard.get_problems",
+
+            args: {
+                start: (current_page - 1) * page_length,
+                page_length: page_length,
+                name: technician_name
+            },
+
+            callback: function (r) {
+
+                showProblems(
+                    r.message.data,
+                    r.message.total
+                );
+
+            }
+        });
+
+        function showProblems(problems, total) {
+
+            let total_pages = Math.ceil(total / page_length);
+
+            let start_record =
+                (current_page - 1) * page_length + 1;
+
+            let end_record =
+                Math.min(current_page * page_length, total);
+
+            let html = `
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Problem ID</th>
+                    <th>Resident</th>
+                    <th>Last Updated</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+    `;
+
+            if (problems.length == 0) {
+
+                html += `
+            <tr>
+                <td colspan="4" class="text-center">
+                    No active tasks found
+                </td>
+            </tr>
+        `;
+
+            } else {
+
+                problems.forEach(function (p) {
+
+                    html += `
+                <tr>
+                    <td>${p.problem_id}</td>
+                    <td>${p.resident}</td>
+                    <td>${p.date || "-"}</td>
+                    <td>${p.status}</td>
+                </tr>
+            `;
+
+                });
+
+            }
+
+            html += `
+            </tbody>
+        </table>
+
+        <div class="d-flex justify-content-between align-items-center mt-3">
+
+            <div>
+                
+            </div>
+
+            <div>
+
+                <button
+                    class="btn btn-secondary btn-sm"
+                    id="prev_page">
+                    Previous
+                </button>
+
+                <span class="mx-3 fw-bold">
+                    Page ${current_page} of ${total_pages}
+                </span>
+
+                <button
+                    class="btn btn-primary btn-sm"
+                    id="next_page">
+                    Next
+                </button>
+
+            </div>
+
+        </div>
+    `;
+
+            $("#problem_list").html(html);
+
+            $("#prev_page").click(function () {
+
+                if (current_page > 1) {
+
+                    current_page--;
+
+                    loadProblems();
+
+                }
+
+            });
+
+            $("#next_page").click(function () {
+
+                if (current_page < total_pages) {
+
+                    current_page++;
+
+                    loadProblems();
+
+                }
+
+            });
+
+            $("#prev_page").prop(
+                "disabled",
+                current_page == 1
+            );
+
+            $("#next_page").prop(
+                "disabled",
+                current_page == total_pages
+            );
+
         }
-    });
+
+    }
+
+    function loadHistory() {
+
+        frappe.call({
+            method: "apartment_app.apartment.page.technician_dashboard.technician_dashboard.get_completed_tasks",
+
+            args: {
+                start: (history_page - 1) * history_page_length,
+                page_length: history_page_length,
+                name: technician_name
+            },
+
+            callback: function (r) {
+
+                show_history(
+                    r.message.data,
+                    r.message.total
+                );
+
+            }
+        });
+
+    }
 
     function open_update_dialog() {
         let dialog = new frappe.ui.Dialog({
@@ -239,7 +425,7 @@ frappe.pages['technician_dashboard'].on_page_load = function(wrapper) {
                         resident: values.resident,
                         status: values.status
                     },
-                    callback: function(r) {
+                    callback: function (r) {
                         frappe.msgprint(r.message);
                         dialog.hide();
                         location.reload();
@@ -259,7 +445,7 @@ frappe.pages['technician_dashboard'].on_page_load = function(wrapper) {
             callback: function (r) {
                 task_data = r.message || [];
                 let options = [];
-                task_data.forEach(function(row) {
+                task_data.forEach(function (row) {
                     options.push(row.problem_id);
                 });
                 dialog.set_df_property("problem_id", "options", options.join("\n"));

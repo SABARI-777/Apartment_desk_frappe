@@ -22,13 +22,35 @@ def get_resident_details():
     )
     
 @frappe.whitelist()
-def get_problems():
-
+def get_problems(start=0, page_length=10):
     resident = frappe.get_doc(
-        "Resident",
-        {"email": frappe.session.user}
+    "Resident",
+    {"email": frappe.session.user}
     )
-    return resident.problems
+
+    data = []
+
+    for row in resident.problems:
+
+        data.append({
+            "problem_id": row.problem_id,
+            "problem": row.problem,
+            "category": row.category,
+            "status": row.status,
+            "date_time": row.date_time,
+            "due_time": row.due_time,
+            "completed_date": row.completed_date
+        })
+
+    start = int(start)
+    page_length = int(page_length)
+
+    total = len(data)
+
+    return {
+        "data": data[start:start + page_length],
+        "total": total
+    }
 
     
 

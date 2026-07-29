@@ -1,15 +1,18 @@
-frappe.pages['faculty_dashboard'].on_page_load = function(wrapper) {
+frappe.pages['faculty_dashboard'].on_page_load = function (wrapper) {
+    let current_page = 1;
+    const page_length = 10;
+
     var page = frappe.ui.make_app_page({
         parent: wrapper,
         title: 'Faculty Dashboard',
         single_column: true
     });
 
-    
+
 
     frappe.call({
         method: "apartment_app.apartment.page.faculty_dashboard.faculty_dashboard.check_faculty",
-        callback: function(r) {
+        callback: function (r) {
             if (r.message) {
                 show_dashboard(page);
             } else {
@@ -20,31 +23,31 @@ frappe.pages['faculty_dashboard'].on_page_load = function(wrapper) {
 
     function show_dashboard(page) {
         $(page.body).html(`
-            <div class="faculty-dashboard">
-                <h1>FACULTY DETAILS</h1>
-                <div id="faculty_details"></div>
-                <hr>
-                <button id="assign_technician" class="btn btn-primary mb-3">
-                    Assign Technicians
-                </button>
-                <button id="add_announcement" class="btn btn-success mb-3">
-                    Add Announcement
-                </button>
-                <div id="problem_list"></div>
-                <hr>
-                <div id="assigned_problem_list"></div>
-                <hr>
-                <div id="completed_problem_list"></div>
-                <h3 class="mt-4">Technicians</h3>
-                <div id="technician_list">
-                    Loading...
-                </div>
-                <h3 class="mt-4">Residents</h3>
-                <div id="residents_list">
-                    Loading...
-                </div>
-            </div>
-        `);
+                    <div class="faculty-dashboard">
+                        <h1>FACULTY DETAILS</h1>
+                        <div id="faculty_details"></div>
+                        <hr>
+                        <button id="assign_technician" class="btn btn-primary mb-3">
+                            Assign Technicians
+                        </button>
+                        <button id="add_announcement" class="btn btn-success mb-3">
+                            Add Announcement
+                        </button>
+                        <div id="problem_list"></div>
+                        <hr>
+                        <div id="assigned_problem_list"></div>
+                        <hr>
+                        <div id="completed_problem_list"></div>
+                        <h3 class="mt-4">Technicians</h3>
+                        <div id="technician_list">
+                            Loading...
+                        </div>
+                        <h3 class="mt-4">Residents</h3>
+                        <div id="residents_list">
+                            Loading...
+                        </div>
+                    </div>
+                `);
 
         $("#assign_technician").click(function () {
             open_assign_dialog();
@@ -68,46 +71,46 @@ frappe.pages['faculty_dashboard'].on_page_load = function(wrapper) {
                     reqd: 1,
                     onchange() {
 
-    let problem = dialog.get_value("problem_id");
+                        let problem = dialog.get_value("problem_id");
 
-    let row = problem_data.find(d => d.problem_id == problem);
+                        let row = problem_data.find(d => d.problem_id == problem);
 
-    if (row) {
+                        if (row) {
 
-        dialog.set_value("resident", row.resident);
-        dialog.set_value("category", row.category);
+                            dialog.set_value("resident", row.resident);
+                            dialog.set_value("category", row.category);
 
-        let technicians = technician_data
-            .filter(t => t.category == row.category)
-            .map(t => t.name);
+                            let technicians = technician_data
+                                .filter(t => t.category == row.category)
+                                .map(t => t.name);
 
-        if (technicians.length > 0) {
+                            if (technicians.length > 0) {
 
-            dialog.set_df_property(
-                "technician",
-                "options",
-                technicians
-            );
+                                dialog.set_df_property(
+                                    "technician",
+                                    "options",
+                                    technicians
+                                );
 
-        } else {
+                            } else {
 
-            dialog.set_df_property(
-                "technician",
-                "options",
-                ["No Technician Available"]
-            );
+                                dialog.set_df_property(
+                                    "technician",
+                                    "options",
+                                    ["No Technician Available"]
+                                );
 
-            dialog.set_value(
-                "technician",
-                "No Technician Available"
-            );
+                                dialog.set_value(
+                                    "technician",
+                                    "No Technician Available"
+                                );
 
-            frappe.msgprint(
-                "No Technician Available for " + row.category + " category."
-            );
-        }
-    }
-}
+                                frappe.msgprint(
+                                    "No Technician Available for " + row.category + " category."
+                                );
+                            }
+                        }
+                    }
                 },
                 {
                     label: "Resident",
@@ -115,12 +118,12 @@ frappe.pages['faculty_dashboard'].on_page_load = function(wrapper) {
                     fieldtype: "Data",
                     read_only: 1
                 },
-								{
-					label: "Category",
-					fieldname: "category",
-					fieldtype: "Data",
-					read_only: 1
-				},
+                {
+                    label: "Category",
+                    fieldname: "category",
+                    fieldtype: "Data",
+                    read_only: 1
+                },
                 {
                     label: "Technician",
                     fieldname: "technician",
@@ -144,34 +147,34 @@ frappe.pages['faculty_dashboard'].on_page_load = function(wrapper) {
                 }
             ],
             primary_action_label: "Assign",
-						primary_action(values) {
+            primary_action(values) {
 
-				if (values.technician === "No Technician Available") {
-					frappe.msgprint("Please add a technician for this category.");
-					return;
-				}
+                if (values.technician === "No Technician Available") {
+                    frappe.msgprint("Please add a technician for this category.");
+                    return;
+                }
 
-				frappe.call({
-					method: "apartment_app.apartment.page.faculty_dashboard.faculty_dashboard.assign_technician",
-					args: {
-						problem_id: values.problem_id,
-						resident: values.resident,
-						technician: values.technician,
-						priority: values.priority
-					},
-					callback: function(r) {
-						frappe.msgprint(r.message);
-						dialog.hide();
-						location.reload();
-					}
-				});
-			}
+                frappe.call({
+                    method: "apartment_app.apartment.page.faculty_dashboard.faculty_dashboard.assign_technician",
+                    args: {
+                        problem_id: values.problem_id,
+                        resident: values.resident,
+                        technician: values.technician,
+                        priority: values.priority
+                    },
+                    callback: function (r) {
+                        frappe.msgprint(r.message);
+                        dialog.hide();
+                        location.reload();
+                    }
+                });
+            }
         });
         dialog.show();
 
         frappe.call({
             method: "apartment_app.apartment.page.faculty_dashboard.faculty_dashboard.get_problem_ids",
-            callback: function(r) {
+            callback: function (r) {
                 problem_data = r.message;
                 let problems = problem_data.map(d => d.problem_id);
                 dialog.set_df_property("problem_id", "options", problems);
@@ -180,7 +183,7 @@ frappe.pages['faculty_dashboard'].on_page_load = function(wrapper) {
 
         frappe.call({
             method: "apartment_app.apartment.page.faculty_dashboard.faculty_dashboard.get_all_technician",
-            callback: function(r) {
+            callback: function (r) {
                 technician_data = r.message;
                 let technicians = technician_data.map(t => t.name);
                 dialog.set_df_property("technician", "options", technicians);
@@ -197,91 +200,171 @@ frappe.pages['faculty_dashboard'].on_page_load = function(wrapper) {
         }
     });
 
-    frappe.call({
-        method: "apartment_app.apartment.page.faculty_dashboard.faculty_dashboard.get_all_residents",
-        callback: function(r) {
-            show_residents(r.message);
-        }
-    });
+    function loadResidents() {
 
-    function show_residents(residents) {
+        frappe.call({
+
+            method:
+                "apartment_app.apartment.page.faculty_dashboard.faculty_dashboard.get_all_residents",
+
+            args: {
+
+                start: (current_page - 1) * page_length,
+
+                page_length: page_length
+
+            },
+
+            callback: function (r) {
+
+                show_residents(
+
+                    r.message.data,
+
+                    r.message.total
+
+                );
+
+            }
+
+        });
+
+    }
+    loadResidents();
+    function show_residents(residents, total) {
+        let total_pages = Math.ceil(total / page_length);
         let html = `
-            <table class="table table-bordered table-striped">
-                <thead>
-                    <tr>
-                        <th>user_name</th>
-                        <th>moble_number</th>
-                        <th>apartment_name</th>
-                        <th>Resident_number</th>
-                        <th>block</th>
-                        <th>resident_id</th>
-                    </tr>
-                </thead>
-                <tbody>
-        `;
-        residents.forEach(function(t) {
+                    <table class="table table-bordered table-striped">
+                    
+                        <thead>
+                            <tr>
+                                <th>user_name</th>
+                                <th>moble_number</th>
+                                <th>apartment_name</th>
+                                <th>Resident_number</th>
+                                <th>block</th>
+                                <th>resident_id</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+        residents.forEach(function (t) {
             html += `
-                <tr>
-                    <td>${t.user_name}</td>
-                    <td>${t.moble_number}</td>
-                    <td>${t.apartment_name}</td>
-                    <td>${t.resident_number}</td>
-                    <td>${t.block}</td>
-                    <td>${t.resident_id}</td>
-                </tr>
-            `;
+                        <tr>
+                            <td>${t.user_name}</td>
+                            <td>${t.moble_number}</td>
+                            <td>${t.apartment_name}</td>
+                            <td>${t.resident_number}</td>
+                            <td>${t.block}</td>
+                            <td>${t.resident_id}</td>
+                        </tr>
+                    `;
         });
         html += `
-                </tbody>
-            </table>
-        `;
+                        </tbody>
+                    </table>
+                `;
+        html += `
+
+                        <div class="mt-3 d-flex justify-content-between">
+
+                        <button
+                        class="btn btn-secondary"
+                        id="prev_page">
+
+                        Previous
+
+                        </button>
+                        <span>
+
+                        Page ${current_page} of ${total_pages}
+
+                        </span>
+
+                        <button
+                        class="btn btn-primary"
+                        id="next_page">
+
+                        Next
+
+                        </button>
+
+                        </div>
+
+                        `;
         $("#residents_list").html(html);
+        $("#prev_page").prop("disabled", current_page == 1).click(function () {
+
+            if (current_page > 1) {
+
+                current_page--;
+
+                loadResidents();
+
+            }
+
+        });
+
+        ("#next_page").prop(
+            "disabled",
+            current_page == total_pages
+        ).click(function () {
+
+            if (current_page * page_length < total) {
+
+                current_page++;
+
+                loadResidents();
+
+            }
+
+        });
     }
 
     frappe.call({
         method: "apartment_app.apartment.page.faculty_dashboard.faculty_dashboard.get_all_technician",
-        callback: function(r) {
+        callback: function (r) {
             show_technicians(r.message);
         }
     });
 
     function show_technicians(technicians) {
         let html = `
-            <table class="table table-bordered table-striped">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Technician ID</th>
-                        <th>Category</th>
-                        <th>Phone</th>
-                        <th>Email</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-        `;
-        technicians.forEach(function(t) {
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Technician ID</th>
+                                <th>Category</th>
+                                <th>Phone</th>
+                                <th>Email</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+        technicians.forEach(function (t) {
             html += `
-                <tr>
-                    <td>${t.name1}</td>
-                    <td>${t.technician_id}</td>
-                    <td>${t.category}</td>
-                    <td>${t.phone}</td>
-                    <td>${t.email}</td>
-                    <td>
-                        <button
-                            class="btn btn-primary btn-sm view-tech"
-                            data-name="${t.name}">
-                            View Dashboard
-                        </button>
-                    </td>
-                </tr>
-            `;
+                        <tr>
+                            <td>${t.name1}</td>
+                            <td>${t.technician_id}</td>
+                            <td>${t.category}</td>
+                            <td>${t.phone}</td>
+                            <td>${t.email}</td>
+                            <td>
+                                <button
+                                    class="btn btn-primary btn-sm view-tech"
+                                    data-name="${t.name}">
+                                    View Dashboard
+                                </button>
+                            </td>
+                        </tr>
+                    `;
         });
         html += `
-                </tbody>
-            </table>
-        `;
+                        </tbody>
+                    </table>
+                `;
         $("#technician_list").html(html);
 
         $(".view-tech").click(function () {
@@ -295,131 +378,131 @@ frappe.pages['faculty_dashboard'].on_page_load = function(wrapper) {
 
     function show_faculty_details(faculty) {
         let html = `
-            <div class="card mb-4">
-                <div class="card-header">
-                    <h4>Faculty Information</h4>
-                </div>
-                <div class="card-body">
-                    <p><b>Name:</b> ${faculty.name1}</p>
-                    <p><b>FACULTY ID:</b> ${faculty.faculty_id}</p>
-                    <p><b>Email:</b> ${faculty.email}</p>
-                </div>
-            </div>
-        `;
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h4>Faculty Information</h4>
+                        </div>
+                        <div class="card-body">
+                            <p><b>Name:</b> ${faculty.name1}</p>
+                            <p><b>FACULTY ID:</b> ${faculty.faculty_id}</p>
+                            <p><b>Email:</b> ${faculty.email}</p>
+                        </div>
+                    </div>
+                `;
         $("#faculty_details").html(html);
     }
 
     frappe.call({
         method: "apartment_app.apartment.page.faculty_dashboard.faculty_dashboard.get_problems",
-        callback: function(r) {
+        callback: function (r) {
             let problems = r.message;
             console.log(problems);
             let html = `
-                <h3 class="mt-4">Pending Tasks</h3>
-                <table class="table table-bordered table-striped">
-                    <thead>
-                        <tr>
-                            <th>Problem ID</th>
-                            <th>resident</th>
-                            <th>Technician </th>
-                            <th>Status</th>
-                            <th>Priority</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-            `;
-            problems.forEach(function(p) {
+                        <h3 class="mt-4">Pending Tasks</h3>
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Problem ID</th>
+                                    <th>resident</th>
+                                    <th>Technician </th>
+                                    <th>Status</th>
+                                    <th>Priority</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                    `;
+            problems.forEach(function (p) {
                 html += `
-                    <tr>
-                        <td>${p.problem_id}</td>
-                        <td>${p.resisdents}</td>
-                        <td>${p.technicians}</td>
-                        <td>${p.status}</td>
-                        <td>${'-'}</td>
-                    </tr>
-                `;
+                            <tr>
+                                <td>${p.problem_id}</td>
+                                <td>${p.resisdents}</td>
+                                <td>${p.technicians}</td>
+                                <td>${p.status}</td>
+                                <td>${'-'}</td>
+                            </tr>
+                        `;
             });
             html += `
-                    </tbody>
-                </table>
-            `;
+                            </tbody>
+                        </table>
+                    `;
             $("#problem_list").html(html);
         }
     });
 
     frappe.call({
         method: "apartment_app.apartment.page.faculty_dashboard.faculty_dashboard.get_problems_completed",
-        callback: function(r) {
+        callback: function (r) {
             let problems = r.message;
             console.log(problems);
             let html = `
-                <h3 class="mt-4">Compled Tasks</h3>
-                <table class="table table-bordered table-striped">
-                    <thead>
-                        <tr>
-                            <th>Problem ID</th>
-                            <th>resident</th>
-                            <th>Technician </th>
-                            <th>Status</th>
-                            <th>Priority</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-            `;
-            problems.forEach(function(p) {
+                        <h3 class="mt-4">Compled Tasks</h3>
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Problem ID</th>
+                                    <th>resident</th>
+                                    <th>Technician </th>
+                                    <th>Status</th>
+                                    <th>Priority</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                    `;
+            problems.forEach(function (p) {
                 html += `
-                    <tr>
-                        <td>${p.problem_id}</td>
-                        <td>${p.resisdents}</td>
-                        <td>${p.technicians}</td>
-                        <td>${p.status}</td>
-                        <td>${p.priority}</td>
-                    </tr>
-                `;
+                            <tr>
+                                <td>${p.problem_id}</td>
+                                <td>${p.resisdents}</td>
+                                <td>${p.technicians}</td>
+                                <td>${p.status}</td>
+                                <td>${p.priority}</td>
+                            </tr>
+                        `;
             });
             html += `
-                    </tbody>
-                </table>
-            `;
+                            </tbody>
+                        </table>
+                    `;
             $("#completed_problem_list").html(html);
         }
     });
 
     frappe.call({
         method: "apartment_app.apartment.page.faculty_dashboard.faculty_dashboard.get_assigned_tasks",
-        callback: function(r) {
+        callback: function (r) {
             let problems = r.message;
             let html = `
-                <h3 class="mt-4">Assigned and In Progress Tasks</h3>
-                <table class="table table-bordered table-striped">
-                    <thead>
-                        <tr>
-                            <th>Problem ID</th>
-                            <th>Resident</th>
-                            <th>Technician</th>
-                            <th>Status</th>
-                            <th>Priority</th>
-                            <th>Last Updated Date</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-            `;
-            problems.forEach(function(p) {
+                        <h3 class="mt-4">Assigned and In Progress Tasks</h3>
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Problem ID</th>
+                                    <th>Resident</th>
+                                    <th>Technician</th>
+                                    <th>Status</th>
+                                    <th>Priority</th>
+                                    <th>Last Updated Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                    `;
+            problems.forEach(function (p) {
                 html += `
-                    <tr>
-                        <td>${p.problem_id}</td>
-                        <td>${p.resisdents}</td>
-                        <td>${p.technicians}</td>
-                        <td>${p.status}</td>
-                        <td>${p.priority}</td>
-                        <td>${p.date || "-"}</td>
-                    </tr>
-                `;
+                            <tr>
+                                <td>${p.problem_id}</td>
+                                <td>${p.resisdents}</td>
+                                <td>${p.technicians}</td>
+                                <td>${p.status}</td>
+                                <td>${p.priority}</td>
+                                <td>${p.date || "-"}</td>
+                            </tr>
+                        `;
             });
             html += `
-                    </tbody>
-                </table>
-            `;
+                            </tbody>
+                        </table>
+                    `;
             $("#assigned_problem_list").html(html);
         }
     });
@@ -460,7 +543,7 @@ frappe.pages['faculty_dashboard'].on_page_load = function(wrapper) {
                 frappe.call({
                     method: "apartment_app.apartment.page.faculty_dashboard.faculty_dashboard.add_announcement",
                     args: values,
-                    callback: function(r) {
+                    callback: function (r) {
                         frappe.msgprint(r.message);
                         dialog.hide();
                         location.reload();
@@ -473,7 +556,7 @@ frappe.pages['faculty_dashboard'].on_page_load = function(wrapper) {
         let apartment_data = [];
         frappe.call({
             method: "apartment_app.apartment.page.faculty_dashboard.faculty_dashboard.get_apartments",
-            callback: function(r) {
+            callback: function (r) {
                 apartment_data = r.message;
                 let apartments = apartment_data.map(a => a.name);
                 dialog.set_df_property("apartment_name", "options", apartments);
