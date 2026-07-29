@@ -99,7 +99,7 @@ frappe.pages['resident_dashboard'].on_page_load = function(wrapper) {
                                 <th>Status</th>
                                 <th>Complaint Date</th>
                                 <th>Due Date</th>
-                                <th>Completed Date</th>
+                                <th>LastUpdated Date</th>
                             </tr>
                         </thead>
                         <tbody>

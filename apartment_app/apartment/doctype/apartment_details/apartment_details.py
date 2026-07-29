@@ -6,7 +6,12 @@ from frappe.model.document import Document
 
 
 class apartment_details(Document):
-	pass
+	def after_insert(self):
+		frappe.msgprint("New Apartment Added!!")
+	def on_update(self):
+		frappe.msgprint("Document updated successfully!!")
+	def after_submit(self):
+		msgprint("Document submited successfully")
 
 
 # @frappe.whitelist()

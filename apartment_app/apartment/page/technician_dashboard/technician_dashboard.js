@@ -111,7 +111,7 @@ frappe.pages['technician_dashboard'].on_page_load = function(wrapper) {
                     <tr>
                         <th>Problem ID</th>
                         <th>Resident</th>
-                        <th>Completed Date</th>
+                        <th>LastUpdated Date</th>
                         <th>Status</th>
                     </tr>
                 </thead>
@@ -147,7 +147,7 @@ frappe.pages['technician_dashboard'].on_page_load = function(wrapper) {
                         <tr>
                             <th>Problem ID</th>
                             <th>Resident</th>
-                            <th>Completed Date</th>
+                            <th>LastUpdated Date</th>
                             <th>Status</th>
                         </tr>
                     </thead>

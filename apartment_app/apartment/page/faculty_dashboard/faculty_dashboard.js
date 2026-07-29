@@ -335,7 +335,7 @@ frappe.pages['faculty_dashboard'].on_page_load = function(wrapper) {
                         <td>${p.resisdents}</td>
                         <td>${p.technicians}</td>
                         <td>${p.status}</td>
-                        <td>${p.priority}</td>
+                        <td>${'-'}</td>
                     </tr>
                 `;
             });
@@ -399,7 +399,7 @@ frappe.pages['faculty_dashboard'].on_page_load = function(wrapper) {
                             <th>Technician</th>
                             <th>Status</th>
                             <th>Priority</th>
-                            <th>Date</th>
+                            <th>Last Updated Date</th>
                         </tr>
                     </thead>
                     <tbody>

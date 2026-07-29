@@ -86,9 +86,7 @@ def update_task(problem_id, resident, status):
         if row.problem_id == problem_id and row.resident == resident:
 
             row.status = status
-
-            if status == "completed":
-                row.date = now_datetime()
+            row.date = now_datetime()
 
             break
 
@@ -102,9 +100,7 @@ def update_task(problem_id, resident, status):
         if row.problem_id == problem_id:
 
             row.status = status
-
-            if status == "completed":
-                row.completed_date = now_datetime()
+            row.completed_date = now_datetime()
 
             break
 

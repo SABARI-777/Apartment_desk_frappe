@@ -3,36 +3,32 @@ from frappe.model.document import Document
 
 
 class Faculty(Document):
+    def before_insert(self):
+        if "@gmail.com" not in self.email:
+            frappe.msgprint("in Valid email plaese enter email with @gmail.com") 
 
-    def on_update(self):
-        for row in self.task:
+    def after_insert(self):
+        frappe.sendmail(
+            recipients=[self.email],
+            subject="Welcome to Our Apartment Desk",
+            message=f"""
+                <h3>Welcome, {self.name}!</h3>
 
-            if not row.technicians or not row.resisdents:
-                continue
+                <p>Your Faculty account has been created successfully.</p>
 
-            if not frappe.db.exists("Technician", row.technicians):
-                continue
+                <p>We wish you all the best in your Life.</p>
 
-            tech_doc = frappe.get_doc("Technician", row.technicians)
-            
-         
+                <br>
+                <h3>ONCE AGAIN WELCOME OUR FACULTY !!!!! S</h3>
+                <p>Regards,<br>
+                APARTMENT Administration</p>
+            """,
+            now=True
+        )
+        frappe.msgprint("email send successfully")
 
-            found = False
-
-            for task in tech_doc.tasks:
-                if task.problem_id == row.problem_id:
-                    found = True
-                    break
-
-            if not found and row.status == "NotAssign":
-                tech_doc.append("tasks", {
-                "problem_id": row.problem_id,
-                "resident": row.resisdents
-                })
-            
-            row.status = "Assign"
-            tech_doc.save(ignore_permissions=True)
-            frappe.msgprint("datas saved!!!!!")
+    def on_submit(self):
+        frappe.msgprint("Document submited successfully!!")
 
 
 

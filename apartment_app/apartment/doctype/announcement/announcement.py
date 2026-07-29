@@ -8,8 +8,8 @@ from frappe.utils import now_datetime
 
 class announcement(Document):
     def after_insert(self):
-		frappe.msgprint("NEW ANOUNNCEMENT ADDED")
-	pass
+        frappe.msgprint("NEW ANOUNNCEMENT ADDED")
+	
 
 
 @frappe.whitelist(allow_guest=True)

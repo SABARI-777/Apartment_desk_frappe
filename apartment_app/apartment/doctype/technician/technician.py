@@ -6,6 +6,30 @@ from frappe.model.document import Document
 
 class Technician(Document):
 
+    def before_insert(self):
+        if "@gmail.com" not in self.email:
+            frappe.msgprint("in Valid email plaese enter email with @gmail.com") 
+
+    def after_insert(self):
+        frappe.sendmail(
+            recipients=[self.email],
+            subject="Welcome to Our Apartment Desk",
+            message=f"""
+                <h3>Welcome, {self.name}!</h3>
+
+                <p>Your Technicians account has been created successfully.</p>
+
+                <p>We wish you all the best in your Life.</p>
+
+                <br>
+                <h3>ONCE AGAIN WELCOME OUR TECHNICAIN !!!!! S</h3>
+                <p>Regards,<br>
+                APARTMENT Administration</p>
+            """,
+            now=True
+        )
+        frappe.msgprint("email send successfully")
+
     def on_update(self):
 
         for task in self.tasks:
@@ -26,8 +50,10 @@ class Technician(Document):
 
             if updated:
                 res_doc.save(ignore_permissions=True)
-
-        frappe.msgprint("Complaint Status Updated")
+                frappe.msgprint("Complaint Status IN resident")
+    
+    def on_submit(self):
+        frappe.msgprint("Document submited successfully!!")
 
 
 @frappe.whitelist(allow_guest=True)
