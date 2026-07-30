@@ -38,7 +38,10 @@ def get_problems(start=0, page_length=10):
             "category": row.category,
             "status": row.status,
             "date_time": row.date_time,
-            "due_time": row.due_time,
+            "total_time": (
+            (row.completed_date - row.date_time).total_seconds() / 3600
+            if row.completed_date else None
+            ),
             "completed_date": row.completed_date
         })
 

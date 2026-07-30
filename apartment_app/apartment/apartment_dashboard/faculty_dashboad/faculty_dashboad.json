@@ -1,0 +1,54 @@
+{
+ "cards": [
+  {
+   "card": "Late_Work"
+  }
+ ],
+ "chart_options": "",
+ "charts": [
+  {
+   "chart": "problem_counts",
+   "width": "Half"
+  },
+  {
+   "chart": "problem_category",
+   "width": "Half"
+  },
+  {
+   "chart": "problem_status",
+   "width": "Half"
+  },
+  {
+   "chart": "problem_count",
+   "width": "Half"
+  },
+  {
+   "chart": "Technician Workload",
+   "width": "Half"
+  },
+  {
+   "chart": "Working Hours",
+   "width": "Half"
+  },
+  {
+   "chart": "Late_Completed",
+   "width": "Half"
+  },
+  {
+   "chart": "avg_resolvig",
+   "width": "Half"
+  }
+ ],
+ "creation": "2026-07-30 11:32:27.149937",
+ "dashboard_name": "Faculty_dashboad",
+ "docstatus": 0,
+ "doctype": "Dashboard",
+ "idx": 0,
+ "is_default": 0,
+ "is_standard": 1,
+ "modified": "2026-07-30 16:53:59.683746",
+ "modified_by": "Administrator",
+ "module": "Apartment",
+ "name": "Faculty_dashboad",
+ "owner": "Administrator"
+}

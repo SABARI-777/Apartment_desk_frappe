@@ -1,6 +1,7 @@
 import frappe
 from frappe import _
 from frappe.utils import now_datetime
+from frappe.utils import getdate, today
 
 @frappe.whitelist()
 def check_Technician():
@@ -41,7 +42,9 @@ def get_problems(start=0, page_length=10,name=None):
                 "problem_id": row.problem_id,
                 "resident": row.resident,
                 "date": row.date,
-                "status": row.status
+                "status": row.status,
+                "due_date":row.due_date,
+                "priority":row.priority
             })
     
     start = int(start)
@@ -75,7 +78,8 @@ def get_problem_ids(name=None):
                 "problem_id": row.problem_id,
                 "resident": row.resident,
                 "date": row.date,
-                "status": row.status
+                "status": row.status,
+               
             })
 
     return data
@@ -95,13 +99,18 @@ def update_task(problem_id, resident, status):
 
             row.status = status
             row.date = now_datetime()
+            if row.date:
+                if getdate(row.date) > getdate(row.due_date):
+                    row.late_count += 1
+            elif row.due_date and getdate(today()) > getdate(row.due_date):
+                row.late_count += 1
 
             break
 
     technician.save(ignore_permissions=True)
 
   
-    resident_doc = frappe.get_doc("Resident", resident)
+    resident_doc = frappe.get_doc("Resident", resident)           
 
     for row in resident_doc.problems:
 
@@ -109,6 +118,7 @@ def update_task(problem_id, resident, status):
 
             row.status = status
             row.completed_date = now_datetime()
+            row.total_time =  (row.completed_date - row.date_time).total_seconds() / 3600
 
             break
 
@@ -138,7 +148,8 @@ def get_completed_tasks(start=0, page_length=10,name=None):
                 "problem_id": row.problem_id,
                 "resident": row.resident,
                 "date": row.date,
-                "status": row.status
+                "status": row.status,
+                "priority":row.priority
             })
 
     start = int(start)
@@ -150,3 +161,21 @@ def get_completed_tasks(start=0, page_length=10,name=None):
         "data": completed[start:start + page_length],
         "total": total
     }
+
+@frappe.whitelist()
+def get_latecount(name=None):
+    count =0;
+    if name:
+        technician = frappe.get_doc("Technician", name)
+    else:
+        technician = frappe.get_doc(
+        "Technician",
+        {"email": frappe.session.user}
+    )
+
+    for row in technician.tasks:
+        if row.late_count>0:
+            count+=1
+    
+    return count
+

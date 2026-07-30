@@ -1,0 +1,34 @@
+{
+ "chart_name": "Late_work",
+ "chart_type": "Report",
+ "creation": "2026-07-30 15:21:39.858738",
+ "currency": "INR",
+ "custom_options": "{\"x_field\": \"PROBLEM_ID\", \"chart_type\": \"Bar\", \"y_axis_fields\": [{\"idx\": 1, \"__islocal\": true, \"y_field\": \"late_count\", \"name\": \"io7ekln6\"}], \"y_fields\": [\"late_count\"], \"colors\": [null]}",
+ "docstatus": 0,
+ "doctype": "Dashboard Chart",
+ "filters_json": "{}",
+ "group_by_type": "Count",
+ "idx": 0,
+ "is_public": 0,
+ "is_standard": 1,
+ "modified": "2026-07-30 15:23:47.279010",
+ "modified_by": "Administrator",
+ "module": "Apartment",
+ "name": "Late_work",
+ "number_of_groups": 0,
+ "owner": "Administrator",
+ "report_name": "Complaint Report",
+ "roles": [],
+ "show_values_over_chart": 0,
+ "time_interval": "Yearly",
+ "timeseries": 0,
+ "timespan": "Last Year",
+ "type": "Bar",
+ "use_report_chart": 0,
+ "x_field": "PROBLEM_ID",
+ "y_axis": [
+  {
+   "y_field": "late_count"
+  }
+ ]
+}

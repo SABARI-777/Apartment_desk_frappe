@@ -12,6 +12,7 @@ def execute(filters=None):
         {"label": "Problem ID", "fieldname": "PROBLEM_ID", "fieldtype": "Data", "width": 120},
         {"label": "Problem Description", "fieldname": "problem", "fieldtype": "Data", "width": 250},
         {"label": "Priority", "fieldname": "priority", "fieldtype": "Data", "width": 100},
+        {"label": "Due_Date", "fieldname": "Due_Date", "fieldtype": "Date", "width": 120},
         {"label": "Initial Status", "fieldname": "initial_status", "fieldtype": "Data", "width": 120},
         {"label": "Complaint Date", "fieldname": "complaint_date", "fieldtype": "Date", "width": 110},
         {"label": "Problem Category", "fieldname": "problem_category", "fieldtype": "Data", "width": 150},
@@ -22,6 +23,8 @@ def execute(filters=None):
         {"label": "Technician Category", "fieldname": "technician_category", "fieldtype": "Data", "width": 150},
         {"label": "Current Status", "fieldname": "current_status", "fieldtype": "Data", "width": 120},
         {"label": "LastUpdate Date", "fieldname": "completed_date", "fieldtype": "Data", "width": 120},
+        {"label": "Late Work", "fieldname": "late_count", "fieldtype": "Int", "width": 120},
+        {"label": "WORKING HOURS", "fieldname": "total_time", "fieldtype": "Int", "width": 120},
         {"label": "Resident Name", "fieldname": "resident_name", "fieldtype": "Data", "width": 150},
         {"label": "Resident Email", "fieldname": "resident_email", "fieldtype": "Data", "width": 180},
         {"label": "Apartment Name", "fieldname": "Apartment_Name", "fieldtype": "Data", "width": 150},
@@ -33,6 +36,7 @@ def execute(filters=None):
         p.problem_id AS PROBLEM_ID,
         p.problem AS problem,
         tt.priority AS priority,
+        tt.due_date AS Due_Date,
         'Pending' AS initial_status,
         DATE(p.date_time) AS complaint_date,
         p.category AS problem_category,
@@ -47,6 +51,8 @@ def execute(filters=None):
             THEN DATE(p.completed_date)
             ELSE 'NOT-COMPLETED'
         END AS completed_date,
+        tt.late_count as late_count,
+        p.total_time AS total_time,
         r.user_name AS resident_name,
         r.email AS resident_email,
         r.apartment_name AS Apartment_Name,
@@ -95,6 +101,11 @@ def execute(filters=None):
         AND (%(priority)s IS NULL
             OR %(priority)s = ''
             OR tt.priority = %(priority)s)
+        AND (
+            %(late_count)s IS NULL
+            OR %(late_count)s = ''
+            OR tt.late_count = %(late_count)s
+            )
 
     """, {
         "from_date": filters.get("from_date"),
@@ -103,6 +114,7 @@ def execute(filters=None):
         "status": filters.get("status"),
         "problem_category": filters.get("problem_category"),
         "priority": filters.get("priority"),
+        "late_count": filters.get("late_count")
     }, as_dict=True)
 
 

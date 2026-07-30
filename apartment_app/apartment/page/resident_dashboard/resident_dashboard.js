@@ -111,7 +111,7 @@ frappe.pages['resident_dashboard'].on_page_load = function (wrapper) {
                                 <th>Category</th>
                                 <th>Status</th>
                                 <th>Complaint Date</th>
-                                <th>Due Date</th>
+                                <th>Working Hours</th>
                                 <th>LastUpdated Date</th>
                             </tr>
                         </thead>
@@ -125,7 +125,7 @@ frappe.pages['resident_dashboard'].on_page_load = function (wrapper) {
                             <td>${p.category}</td>
                             <td>${p.status}</td>
                             <td>${p.date_time || "-"}</td>
-                            <td>${p.due_time || "-"}</td>
+                            <td>${p.total_time || "-"}</td>
                             <td>${p.completed_date || "-"}</td>
                         </tr>
                     `;

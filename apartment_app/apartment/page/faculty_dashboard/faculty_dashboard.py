@@ -12,43 +12,31 @@ def check_faculty():
 
 @frappe.whitelist()
 def get_faculty_details():
-
     faculty = frappe.get_doc(
         "Faculty",
         {"email": frappe.session.user}
     )
-
     return faculty
 
 
 @frappe.whitelist()
-def get_problems():
+def get_problems(start=0, page_length=10):
+    start = int(start)
+    page_length = int(page_length)
 
     faculty = frappe.get_doc(
         "Faculty",
         {"email": frappe.session.user}
     )
 
-    assigned = []
-
-    for row in faculty.task:
-        assigned.append(row.problem_id)
-
+    assigned = [row.problem_id for row in faculty.task]
     data = []
-
     residents = frappe.get_all("Resident", pluck="name")
 
     for resident_name in residents:
-
         resident = frappe.get_doc("Resident", resident_name)
-
         for row in resident.problems:
-
-            if (
-                row.status == "pending"
-                and row.problem_id not in assigned
-            ):
-
+            if row.status == "pending" and row.problem_id not in assigned:
                 data.append({
                     "problem_id": row.problem_id,
                     "resisdents": resident.name,
@@ -56,64 +44,77 @@ def get_problems():
                     "status": row.status
                 })
 
-    return data
+    total = len(data)
+    paginated_data = data[start:start + page_length]
+
+    return {
+        "data": paginated_data,
+        "total": total
+    }
 
 
 @frappe.whitelist()
-def get_assigned_tasks():
+def get_assigned_tasks(start=0, page_length=10):
+    start = int(start)
+    page_length = int(page_length)
 
     data = []
-
     technicians = frappe.get_all("Technician", pluck="name")
 
     for technician_name in technicians:
-
         technician = frappe.get_doc("Technician", technician_name)
-
         for row in technician.tasks:
-
             if row.status.lower() != "completed":
-
                 data.append({
                     "problem_id": row.problem_id,
                     "resisdents": row.resident,
                     "technicians": technician.name,
                     "status": row.status,
                     "priority": row.priority,
-                    "date": row.date
+                    "date": row.date,
+                    "due_date":row.due_date
                 })
 
-    return data
- 
+    total = len(data)
+    paginated_data = data[start:start + page_length]
+
+    return {
+        "data": paginated_data,
+        "total": total
+    }
+
+
 @frappe.whitelist()
-def get_problems_completed():
+def get_problems_completed(start=0, page_length=10):
+    start = int(start)
+    page_length = int(page_length)
 
     data = []
-
     technicians = frappe.get_all("Technician", pluck="name")
 
     for technician_name in technicians:
-
         technician = frappe.get_doc("Technician", technician_name)
-
         for row in technician.tasks:
-
             if row.status.lower() == "completed":
-
                 data.append({
                     "problem_id": row.problem_id,
                     "resisdents": row.resident,
                     "technicians": technician.name,
                     "status": row.status,
-                    "priority":row.priority
+                    "priority": row.priority
                 })
 
-    return data
+    total = len(data)
+    paginated_data = data[start:start + page_length]
+
+    return {
+        "data": paginated_data,
+        "total": total
+    }
 
 
 @frappe.whitelist()
-def add_announcement(apartment_name,message, from_date, to_date):
-
+def add_announcement(apartment_name, message, from_date, to_date):
     faculty = frappe.get_doc(
         "Faculty",
         {"email": frappe.session.user}
@@ -134,18 +135,17 @@ def add_announcement(apartment_name,message, from_date, to_date):
 
     return "Announcement Published Successfully"
 
+
 @frappe.whitelist()
 def get_apartments():
-
     return frappe.get_all(
         "apartment_details",
         fields=["name", "apartment_name"]
     )     
 
-        
+
 @frappe.whitelist()
 def get_all_residents(start=0, page_length=10):
-
     start = int(start)
     page_length = int(page_length)
 
@@ -172,9 +172,11 @@ def get_all_residents(start=0, page_length=10):
 
 
 @frappe.whitelist()
-def get_all_technician():
+def get_all_technician(start=0, page_length=10):
+    start = int(start)
+    page_length = int(page_length)
 
-    return frappe.get_list(
+    technicians = frappe.get_list(
         "Technician",
         fields=[
             "name",
@@ -183,34 +185,35 @@ def get_all_technician():
             "category",
             "phone",
             "email"
-        ]
+        ],
+        start=start,
+        page_length=page_length
     )
+
+    total = frappe.db.count("Technician")
+
+    return {
+        "data": technicians,
+        "total": total
+    }
+
 
 @frappe.whitelist()
 def get_problem_ids():
-
     faculty = frappe.get_doc(
         "Faculty",
         {"email": frappe.session.user}
     )
 
     assigned = [row.problem_id for row in faculty.task]
-
     data = []
 
     residents = frappe.get_all("Resident", pluck="name")
 
     for resident_name in residents:
-
         resident = frappe.get_doc("Resident", resident_name)
-
         for row in resident.problems:
-
-            if (
-                row.status == "pending"
-                and row.problem_id not in assigned
-            ):
-
+            if row.status == "pending" and row.problem_id not in assigned:
                 data.append({
                     "problem_id": row.problem_id,
                     "resident": resident.name,
@@ -219,10 +222,9 @@ def get_problem_ids():
 
     return data
 
-@frappe.whitelist()
-def assign_technician(problem_id, resident, technician, priority):
 
-      
+@frappe.whitelist()
+def assign_technician(problem_id, resident, technician, priority,due_date):
     technician_doc = frappe.get_doc("Technician", technician)
 
     row = technician_doc.append("tasks", {})
@@ -232,10 +234,10 @@ def assign_technician(problem_id, resident, technician, priority):
     row.date = frappe.utils.now_datetime()
     row.status = "pending"
     row.priority = priority
+    row.due_date = due_date
 
     technician_doc.save(ignore_permissions=True)
 
-     
     faculty = frappe.get_doc(
         "Faculty",
         {"email": frappe.session.user}
@@ -251,5 +253,3 @@ def assign_technician(problem_id, resident, technician, priority):
     faculty.save(ignore_permissions=True)
 
     return "Technician Assigned Successfully"
-
-    

@@ -12,7 +12,8 @@
   "technicians",
   "problem_id",
   "status",
-  "priority"
+  "priority",
+  "due_date"
  ],
  "fields": [
   {
@@ -49,13 +50,18 @@
    "fieldtype": "Select",
    "label": "priority",
    "options": "High\nMedium\nLow"
+  },
+  {
+   "fieldname": "due_date",
+   "fieldtype": "Date",
+   "label": "due_date"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2026-07-27 10:13:16.426533",
+ "modified": "2026-07-30 12:16:01.259357",
  "modified_by": "Administrator",
  "module": "Apartment",
  "name": "TASK-ASSIGN",

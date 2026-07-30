@@ -11,7 +11,9 @@
   "problem_id",
   "date",
   "status",
-  "priority"
+  "priority",
+  "due_date",
+  "late_count"
  ],
  "fields": [
   {
@@ -45,13 +47,25 @@
    "fieldtype": "Datetime",
    "in_list_view": 1,
    "label": "date"
+  },
+  {
+   "fieldname": "due_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "due_date"
+  },
+  {
+   "fieldname": "late_count",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "late_count"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2026-07-29 11:14:33.433016",
+ "modified": "2026-07-30 14:50:18.101285",
  "modified_by": "Administrator",
  "module": "Apartment",
  "name": "Tech-tasks",

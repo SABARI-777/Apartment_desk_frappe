@@ -33,6 +33,12 @@ frappe.query_reports["Complaint Report"] = {
             label: "Priority",
             fieldtype: "Select",
             options: "\nLow\nMedium\nHigh"
-        }
+        },
+        {
+        fieldname: "late_count",
+        label: "Late Work",
+        fieldtype: "Select",
+        options: "\n0\n1"
+            }
     ]
 };

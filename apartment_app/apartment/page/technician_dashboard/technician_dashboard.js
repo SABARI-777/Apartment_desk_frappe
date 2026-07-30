@@ -4,7 +4,7 @@ const technician_name = params.get("name");
 frappe.pages['technician_dashboard'].on_page_load = function (wrapper) {
     let current_page = 1;
     const page_length = 10;
-
+ 
     let history_page = 1;
     const history_page_length = 10;
 
@@ -90,6 +90,14 @@ frappe.pages['technician_dashboard'].on_page_load = function (wrapper) {
             }
         }
     });
+    let tot=0;
+     frappe.call({
+            method: "apartment_app.apartment.page.technician_dashboard.technician_dashboard.get_latecount",
+            args:{name:technician_name},
+            callback: function (r) {
+               tot = r.message;
+            }
+        });
 
     function show_technician_details(technician) {
         let html = `
@@ -103,6 +111,7 @@ frappe.pages['technician_dashboard'].on_page_load = function (wrapper) {
                     <p><b>Category:</b> ${technician.category}</p>
                     <p><b>Mobile:</b> ${technician.phone}</p>
                     <p><b>Email:</b> ${technician.email}</p>
+                     <p><b>Late count:</b> ${tot}</p>
                 </div>
             </div>
         `;
@@ -131,17 +140,20 @@ frappe.pages['technician_dashboard'].on_page_load = function (wrapper) {
                         <th>Resident</th>
                         <th>LastUpdated Date</th>
                         <th>Status</th>
+                        <th>Priority</th>
                     </tr>
                 </thead>
                 <tbody>
         `;
         history.forEach(function (p) {
+           
             html += `
                 <tr>
                     <td>${p.problem_id}</td>
                     <td>${p.resident}</td>
                     <td>${p.date || "-"}</td>
                     <td>${p.status}</td>
+                     <td>${p.priority}</td>
                 </tr>
             `;
         });
@@ -249,6 +261,8 @@ frappe.pages['technician_dashboard'].on_page_load = function (wrapper) {
                     <th>Resident</th>
                     <th>Last Updated</th>
                     <th>Status</th>
+                     <th>Due Date</th>
+                    <th>Priority</th>
                 </tr>
             </thead>
             <tbody>
@@ -267,13 +281,15 @@ frappe.pages['technician_dashboard'].on_page_load = function (wrapper) {
             } else {
 
                 problems.forEach(function (p) {
-
+ 
                     html += `
                 <tr>
                     <td>${p.problem_id}</td>
                     <td>${p.resident}</td>
                     <td>${p.date || "-"}</td>
                     <td>${p.status}</td>
+                     <td>${p.due_date}</td>
+                     <td>${p.priority}</td>
                 </tr>
             `;
 
@@ -454,3 +470,4 @@ frappe.pages['technician_dashboard'].on_page_load = function (wrapper) {
         });
     }
 };
+
