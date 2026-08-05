@@ -5,7 +5,7 @@ from frappe.model.document import Document
 class Faculty(Document):
     def before_insert(self):
         if "@gmail.com" not in self.email:
-            frappe.msgprint("in Valid email plaese enter email with @gmail.com") 
+            frappe.throw("in Valid email plaese enter email with @gmail.com") 
 
     def after_insert(self):
         frappe.sendmail(

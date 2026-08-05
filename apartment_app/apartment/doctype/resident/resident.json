@@ -83,7 +83,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-07-24 12:22:03.812166",
+ "modified": "2026-08-04 16:15:52.566187",
  "modified_by": "Administrator",
  "module": "Apartment",
  "name": "Resident",
@@ -104,7 +104,6 @@
   },
   {
    "create": 1,
-   "delete": 1,
    "email": 1,
    "export": 1,
    "print": 1,
@@ -113,15 +112,6 @@
    "role": "User",
    "share": 1,
    "write": 1
-  },
-  {
-   "email": 1,
-   "export": 1,
-   "print": 1,
-   "read": 1,
-   "report": 1,
-   "role": "Technician",
-   "share": 1
   },
   {
    "create": 1,

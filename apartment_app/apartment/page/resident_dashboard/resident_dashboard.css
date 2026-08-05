@@ -22,7 +22,6 @@
     color: var(--text-main);
 }
 
-/* Resident Card */
 .resident-card,
 .card.mb-4 {
     background: #ffffff;
@@ -84,7 +83,6 @@
     letter-spacing: 0.03em;
 }
 
-/* Action Buttons */
 .action-box {
     display: flex;
     gap: 14px;
@@ -134,7 +132,6 @@
     background: linear-gradient(135deg, #047857, #065f46);
 }
 
-/* Problem List */
 #problem_list {
     margin-top: 8px;
 }
@@ -191,7 +188,6 @@
     font-weight: 500;
 }
 
-/* Responsive */
 @media (max-width: 768px) {
     .resident-dashboard {
         padding: 20px 16px;
@@ -214,4 +210,44 @@
     .card-body p b {
         min-width: auto;
     }
+}
+
+.p-pending {
+    background: #ff0004;
+    color: white;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-weight: 600;
+}
+
+.p-progress {
+    background: #ffb012;
+    color: black;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-weight: 600;
+}
+
+.p-completed {
+    background: #00b718;
+    color: white;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-weight: 600;
+}
+
+.status-completed {
+    background: #00b718;
+    color: white;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-weight: 600;
+}
+
+.status-pending {
+    background: #ff0004;
+    color: white;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-weight: 600;
 }

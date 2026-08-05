@@ -258,3 +258,10 @@ app_license = "mit"
 # app_include_css = [
 #     "/assets/apartment_app/css/resident_overview.css"
 # ]
+scheduler_events = {
+    "cron": {
+        "* * * * *": [
+            "apartment_app.tasks.send_daily_faculty_report"
+        ]
+    }
+}

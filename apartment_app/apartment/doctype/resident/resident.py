@@ -4,7 +4,7 @@ from frappe.model.document import Document
 class Resident(Document):
     def before_insert(self):
         if "@gmail.com" not in self.email:
-            frappe.msgprint("in Valid email plaese enter email with @gmail.com") 
+            frappe.throw("in Valid email plaese enter email with @gmail.com") 
 
     def after_insert(self):
         frappe.sendmail(
@@ -15,12 +15,10 @@ class Resident(Document):
 
                 <p>Your User account has been created successfully.</p>
 
-                
-
-                <p>We wish you all the best in your Stay.</p>
+                <p>We wish you all the best in your Life.</p>
 
                 <br>
-
+                <h3>ONCE AGAIN WELCOME OUR RESIDENT !!!!! S</h3>
                 <p>Regards,<br>
                 APARTMENT Administration</p>
             """,

@@ -39,16 +39,19 @@ def get_problems(start=0, page_length=10):
             "status": row.status,
             "date_time": row.date_time,
             "total_time": (
-            (row.completed_date - row.date_time).total_seconds() / 3600
+            round((row.completed_date - row.date_time).total_seconds() / 3600,2)
             if row.completed_date else None
             ),
-            "completed_date": row.completed_date
+            "completed_date": row.completed_date,
+            "over_due":row.over_due
         })
 
     start = int(start)
     page_length = int(page_length)
 
     total = len(data)
+
+    data.reverse(); 
 
     return {
         "data": data[start:start + page_length],
@@ -80,6 +83,7 @@ def add_problem(problem,category):
  
     row.status = "pending"
     row.date_time = now_datetime()
+    row.over_due = "NO"
 
     resident.save(ignore_permissions=True)
 

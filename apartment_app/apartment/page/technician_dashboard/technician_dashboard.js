@@ -4,7 +4,7 @@ const technician_name = params.get("name");
 frappe.pages['technician_dashboard'].on_page_load = function (wrapper) {
     let current_page = 1;
     const page_length = 10;
- 
+
     let history_page = 1;
     const history_page_length = 10;
 
@@ -90,14 +90,14 @@ frappe.pages['technician_dashboard'].on_page_load = function (wrapper) {
             }
         }
     });
-    let tot=0;
-     frappe.call({
-            method: "apartment_app.apartment.page.technician_dashboard.technician_dashboard.get_latecount",
-            args:{name:technician_name},
-            callback: function (r) {
-               tot = r.message;
-            }
-        });
+    let tot = 0;
+    frappe.call({
+        method: "apartment_app.apartment.page.technician_dashboard.technician_dashboard.get_latecount",
+        args: { name: technician_name },
+        callback: function (r) {
+            tot = r.message;
+        }
+    });
 
     function show_technician_details(technician) {
         let html = `
@@ -146,14 +146,32 @@ frappe.pages['technician_dashboard'].on_page_load = function (wrapper) {
                 <tbody>
         `;
         history.forEach(function (p) {
-           
+                  let status_class = "";
+                  
+                  if (p.priority === "High") {
+                      status_class = "status-pending";
+                    } else if (p.priority === "Medium") {
+                        status_class = "status-progress";
+                    } else if (p.priority === "Low") {
+                        status_class = "status-completed";
+                    }
+                    
+                let status_classs = "";
+              if (p.status === "pending") {
+                status_classs = "p-pending";
+            } else if (p.status === "inprogress") {
+                status_classs = "p-progress";
+            } else if (p.status === "completed") {
+                status_classs = "p-completed";
+            }
+
             html += `
                 <tr>
                     <td>${p.problem_id}</td>
                     <td>${p.resident}</td>
                     <td>${p.date || "-"}</td>
-                    <td>${p.status}</td>
-                     <td>${p.priority}</td>
+                    <td><span class="${status_classs}">${p.status}</span></td>
+                    <td><span class="${status_class}">${p.priority}</span></td>
                 </tr>
             `;
         });
@@ -280,16 +298,38 @@ frappe.pages['technician_dashboard'].on_page_load = function (wrapper) {
 
             } else {
 
-                problems.forEach(function (p) {
- 
+             problems.forEach(function (p) {
+                 let status_class = "";
+    
+            if (p.priority === "High") {
+                status_class = "status-pending";
+            } else if (p.priority === "Medium") {
+                status_class = "status-progress";
+            } else if (p.priority === "Low") {
+                status_class = "status-completed";
+            }
+
+                  let status_classs = "";
+              if (p.status === "pending") {
+                status_classs = "p-pending";
+            } else if (p.status === "inprogress") {
+                status_classs = "p-progress";
+            } else if (p.status === "completed") {
+                status_classs = "p-completed";
+            }
+
+               const dueDate = new Date(p.due_date);
+            const now = new Date();
+            const dueClass = dueDate < now ? "overdue" : "ontime";
+
                     html += `
                 <tr>
                     <td>${p.problem_id}</td>
                     <td>${p.resident}</td>
                     <td>${p.date || "-"}</td>
-                    <td>${p.status}</td>
-                     <td>${p.due_date}</td>
-                     <td>${p.priority}</td>
+                     <td><span class="${status_classs}">${p.status}</span></td>
+                    <td class="${dueClass}">${p.due_date}</td>
+                     <td><span class="${status_class}">${p.priority}</span></td>
                 </tr>
             `;
 

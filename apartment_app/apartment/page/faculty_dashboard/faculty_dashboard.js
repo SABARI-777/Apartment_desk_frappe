@@ -249,12 +249,17 @@ frappe.pages['faculty_dashboard'].on_page_load = function (wrapper) {
                 <tbody>
         `;
         problems.forEach(function (p) {
+            let status_class = "";
+            if (p.status === "pending") {
+                status_class = "status-pending";
+            }
+
             html += `
                 <tr>
                     <td>${p.problem_id}</td>
                     <td>${p.resisdents}</td>
                     <td>Not-Assign</td>
-                    <td>${p.status}</td>
+                     <td><span class="${status_class}">${p.status}</span></td>
                     <td>Not-Assign</td>
                 </tr>
             `;
@@ -300,33 +305,57 @@ frappe.pages['faculty_dashboard'].on_page_load = function (wrapper) {
 
     function show_assigned_tasks(problems, total) {
         let total_pages = Math.ceil(total / page_length) || 1;
+        
+        
+        
         let html = `
-            <h3 class="mt-4">Assigned and In Progress Tasks</h3>
-            <table class="table table-bordered table-striped">
-                <thead>
-                    <tr>
-                        <th>Problem ID</th>
-                        <th>Resident</th>
-                        <th>Technician</th>
-                        <th>Status</th>
-                        <th>Priority</th>
-                         <th>Due Date</th>
-                        <th>Last Updated Date</th>
-                    </tr>
-                </thead>
-                <tbody>
-        `;
+        <h3 class="mt-4">Assigned and In Progress Tasks</h3>
+        <table class="table table-bordered table-striped">
+        <thead>
+        <tr>
+        <th>Problem ID</th>
+        <th>Resident</th>
+        <th>Technician</th>
+        <th>Status</th>
+        <th>Priority</th>
+        <th>Due Date</th>
+        <th>Last Updated Date</th>
+        </tr>
+        </thead>
+        <tbody>
+                        `;
         problems.forEach(function (p) {
+            let status_class = "";
+    
+            if (p.priority === "High") {
+                status_class = "status-pending";
+            } else if (p.priority === "Medium") {
+                status_class = "status-progress";
+            } else if (p.priority === "Low") {
+                status_class = "status-completed";
+            }
+             let status_classs = "";
+              if (p.status === "pending") {
+                status_classs = "p-pending";
+            } else if (p.status === "inprogress") {
+                status_classs = "p-progress";
+            } else if (p.status === "completed") {
+                status_classs = "p-completed";
+            }
+            const dueDate = new Date(p.due_date);
+            const now = new Date();
+            const dueClass = dueDate < now ? "overdue" : "ontime";
+
             html += `
-                <tr>
-                    <td>${p.problem_id}</td>
-                    <td>${p.resisdents}</td>
-                    <td>${p.technicians}</td>
-                    <td>${p.status}</td>
-                    <td>${p.priority}</td>
-                      <td>${p.due_date}</td>
-                    <td>${p.date || "-"}</td>
-                </tr>
+            <tr>
+            <td>${p.problem_id}</td>
+            <td>${p.resisdents}</td>
+            <td>${p.technicians}</td>
+            <td><span class="${status_classs}">${p.status}</span></td>
+            <td><span class="${status_class}">${p.priority}</span></td>
+            <td class="${dueClass}">${p.due_date}</td>
+            <td>${p.date || "-"}</td>
+            </tr>
             `;
         });
         html += `
@@ -385,13 +414,30 @@ frappe.pages['faculty_dashboard'].on_page_load = function (wrapper) {
                 <tbody>
         `;
         problems.forEach(function (p) {
+             let status_class = "";
+    
+            if (p.priority === "High") {
+                status_class = "status-pending";
+            } else if (p.priority === "Medium") {
+                status_class = "status-progress";
+            } else if (p.priority === "Low") {
+                status_class = "status-completed";
+            }
+                let status_classs = "";
+              if (p.status === "pending") {
+                status_classs = "p-pending";
+            } else if (p.status === "inprogress") {
+                status_classs = "p-progress";
+            } else if (p.status === "completed") {
+                status_classs = "p-completed";
+            }
             html += `
                 <tr>
                     <td>${p.problem_id}</td>
                     <td>${p.resisdents}</td>
                     <td>${p.technicians}</td>
-                    <td>${p.status}</td>
-                    <td>${p.priority}</td>
+                    <td><span class="${status_classs}">${p.status}</span></td>
+                    <td><span class="${status_class}">${p.priority}</span></td>
                 </tr>
             `;
         });

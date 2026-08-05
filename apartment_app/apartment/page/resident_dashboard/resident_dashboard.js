@@ -101,8 +101,11 @@ frappe.pages['resident_dashboard'].on_page_load = function (wrapper) {
                 let start_record = (current_page - 1) * page_length + 1;
 
                 let end_record = Math.min(current_page * page_length, total);
+
                 let html = `
                     <h3 class="mt-4">My Problems</h3>
+
+                    
                     <table class="table table-bordered table-striped">
                         <thead>
                             <tr>
@@ -113,20 +116,41 @@ frappe.pages['resident_dashboard'].on_page_load = function (wrapper) {
                                 <th>Complaint Date</th>
                                 <th>Working Hours</th>
                                 <th>LastUpdated Date</th>
+                                <th>Over Due</th>
                             </tr>
                         </thead>
                         <tbody>
                 `;
                 problems.forEach(function (p) {
+
+                    let status_classs = "";
+                if (p.status === "pending") {
+                    status_classs = "p-pending";
+                } else if (p.status === "inprogress") {
+                    status_classs = "p-progress";
+                } else if (p.status === "completed") {
+                    status_classs = "p-completed";
+                }
+                     let status_class = "";
+    
+            if (p.over_due === "YES") {
+                status_class = "status-pending";
+            } else
+            {
+                 status_class = "status-completed";
+            }
+
                     html += `
                         <tr>
                             <td>${p.problem_id}</td>
                             <td>${p.problem}</td>
                             <td>${p.category}</td>
-                            <td>${p.status}</td>
+                          <td><span class="${status_classs}">${p.status}</span></td>
                             <td>${p.date_time || "-"}</td>
                             <td>${p.total_time || "-"}</td>
                             <td>${p.completed_date || "-"}</td>
+                            <td><span class="${status_class}">${p.over_due || "-"}</span></td>
+                         
                         </tr>
                     `;
                 });

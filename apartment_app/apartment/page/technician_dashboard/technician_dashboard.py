@@ -52,6 +52,8 @@ def get_problems(start=0, page_length=10,name=None):
 
     total = len(data)
 
+    data.reverse()
+
     return {
         "data": data[start:start + page_length],
         "total": total
@@ -81,47 +83,57 @@ def get_problem_ids(name=None):
                 "status": row.status,
                
             })
+    data.reverse()
 
     return data
+
+
 
 @frappe.whitelist()
 def update_task(problem_id, resident, status):
 
-   
     technician = frappe.get_doc(
         "Technician",
         {"email": frappe.session.user}
     )
 
-    for row in technician.tasks:
+    is_over_due = False
 
+    for row in technician.tasks:
         if row.problem_id == problem_id and row.resident == resident:
 
             row.status = status
             row.date = now_datetime()
-            if row.date:
+
+            if row.due_date:
                 if getdate(row.date) > getdate(row.due_date):
                     row.late_count += 1
-            elif row.due_date and getdate(today()) > getdate(row.due_date):
-                row.late_count += 1
+                    is_over_due = True
+                elif getdate(today()) > getdate(row.due_date):
+                    row.late_count += 1
+                    is_over_due = True
 
             break
 
     technician.save(ignore_permissions=True)
 
-  
-    resident_doc = frappe.get_doc("Resident", resident)           
+    resident_doc = frappe.get_doc("Resident", resident)
 
     for row in resident_doc.problems:
-
         if row.problem_id == problem_id:
 
             row.status = status
             row.completed_date = now_datetime()
-            row.total_time =  (row.completed_date - row.date_time).total_seconds() / 3600
+
+            if row.date_time:
+                row.total_time = round(
+                    (row.completed_date - row.date_time
+                ).total_seconds() / 3600,2)
+
+            row.over_due = "YES" if is_over_due else "NO"
 
             break
-
+    print(is_over_due)
     resident_doc.save(ignore_permissions=True)
 
     return "Task Updated Successfully"
@@ -156,6 +168,8 @@ def get_completed_tasks(start=0, page_length=10,name=None):
     page_length = int(page_length)
 
     total = len(completed)
+    completed.reverse()
+
 
     return {
         "data": completed[start:start + page_length],

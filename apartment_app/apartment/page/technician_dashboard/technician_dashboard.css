@@ -36,7 +36,6 @@
                     letter-spacing: -0.02em;
                 }
 
-                /* Cards */
                 .card.mb-4 {
                     background: #ffffff;
                     border-radius: 16px;
@@ -91,7 +90,6 @@
                     letter-spacing: 0.04em;
                 }
 
-                /* Button */
                 #update_status {
                     background: linear-gradient(135deg, #1e40af, #1e3a8a);
                     color: #ffffff;
@@ -115,7 +113,6 @@
                     box-shadow: 0 8px 20px -4px rgba(30, 64, 175, 0.4);
                 }
 
-                /* Tables */
                 #problem_list table,
                 #history_list table {
                     background: #ffffff;
@@ -166,7 +163,6 @@
                     margin: 28px 0;
                 }
 
-                /* Responsive */
                 @media (max-width: 768px) {
                     .technician-dashboard {
                         padding: 20px 16px;
@@ -183,3 +179,71 @@
                         justify-content: center;
                     }
                 }
+
+.status-pending {
+    background: #ff0004;
+    color: white;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-weight: 600;
+}
+
+.status-progress {
+    background: #ffb012;
+    color: black;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-weight: 600;
+}
+
+.status-completed {
+    background: #00b718;
+    color: white;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-weight: 600;
+}
+
+.p-pending {
+    background: #ff0004;
+    color: white;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-weight: 600;
+}
+
+.p-progress {
+    background: #ffb012;
+    color: black;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-weight: 600;
+}
+
+.p-completed {
+    background: #00b718;
+    color: white;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-weight: 600;
+}
+
+.overdue,
+.ontime {
+    display: inline-block;
+    padding: 2px 6px;
+    font-size: 11px;
+    font-weight: 600;
+    border-radius: 12px;
+    line-height: 1.2;
+}
+
+.overdue {
+    background-color: #ff4d4f;
+    color: white;
+}
+
+.ontime {
+    background-color: #00b718;
+    color: white;
+}

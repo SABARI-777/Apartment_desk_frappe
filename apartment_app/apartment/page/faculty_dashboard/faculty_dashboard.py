@@ -44,7 +44,9 @@ def get_problems(start=0, page_length=10):
                     "status": row.status
                 })
 
+
     total = len(data)
+    data.reverse()
     paginated_data = data[start:start + page_length]
 
     return {
@@ -76,6 +78,7 @@ def get_assigned_tasks(start=0, page_length=10):
                 })
 
     total = len(data)
+    data.reverse()
     paginated_data = data[start:start + page_length]
 
     return {
@@ -105,6 +108,7 @@ def get_problems_completed(start=0, page_length=10):
                 })
 
     total = len(data)
+    data.reverse()
     paginated_data = data[start:start + page_length]
 
     return {
@@ -162,7 +166,8 @@ def get_all_residents(start=0, page_length=10):
         start=start,
         page_length=page_length
     )
-
+    
+    # residents.reverse()
     total = frappe.db.count("Resident")
 
     return {
@@ -189,7 +194,7 @@ def get_all_technician(start=0, page_length=10):
         start=start,
         page_length=page_length
     )
-
+    # technicians.reverse()
     total = frappe.db.count("Technician")
 
     return {
@@ -253,3 +258,4 @@ def assign_technician(problem_id, resident, technician, priority,due_date):
     faculty.save(ignore_permissions=True)
 
     return "Technician Assigned Successfully"
+    

@@ -1,0 +1,35 @@
+{
+ "attach_files": "",
+ "attach_print": 0,
+ "channel": "Email",
+ "condition_type": "Python",
+ "creation": "2026-08-04 18:06:58.528436",
+ "days_in_advance": 0,
+ "docstatus": 0,
+ "doctype": "Notification",
+ "document_type": "Resident",
+ "enabled": 1,
+ "event": "Save",
+ "idx": 0,
+ "is_standard": 1,
+ "message": "<h3>New Resident Registered</h3>\n\nResident Name:\n{{ doc.user_name }}\n\nApartment:\n{{ doc.apartment_name }}\n\nBlock:\n{{ doc.block }}\n\nResident ID:\n{{ doc.resident_id }}",
+ "message_type": "HTML",
+ "minutes_offset": 0,
+ "modified": "2026-08-04 18:37:36.787348",
+ "modified_by": "Administrator",
+ "module": "Apartment",
+ "name": "resident_notify",
+ "owner": "Administrator",
+ "recipients": [
+  {
+   "receiver_by_document_field": "owner",
+   "receiver_by_role": "Technician"
+  }
+ ],
+ "send_system_notification": 0,
+ "send_to_all_assignees": 0,
+ "sender": "sabari7091095@gmail.com",
+ "sender_email": "sabari7091095@gmail.com",
+ "set_property_after_alert": "",
+ "subject": "NEW RESIDENT"
+}

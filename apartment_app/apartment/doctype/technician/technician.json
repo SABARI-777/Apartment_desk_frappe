@@ -68,7 +68,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-07-24 12:54:39.471511",
+ "modified": "2026-08-04 16:16:10.528088",
  "modified_by": "Administrator",
  "module": "Apartment",
  "name": "Technician",
@@ -89,6 +89,7 @@
    "write": 1
   },
   {
+   "create": 1,
    "email": 1,
    "export": 1,
    "print": 1,
