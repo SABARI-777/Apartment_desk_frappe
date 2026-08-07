@@ -1,73 +1,59 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 :root {
-    --primary: #4f46e5;
-    --primary-dark: #4338ca;
-    --primary-light: #eef2ff;
-    --success: #059669;
-    --success-dark: #047857;
-    --text-main: #1e293b;
-    --text-muted: #64748b;
-    --border: #e2e8f0;
-    --bg: #f8fafc;
-    --card-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 10px 15px -3px rgba(0,0,0,0.08);
-    --card-shadow-hover: 0 10px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.05);
+    --bg: #ffffff;
+    --card-bg: #ffffff;
+    --text-main: #111111;
+    --text-muted: #666666;
+    --border: #e5e5e5;
+    --border-dark: #111111;
 }
 
 .resident-dashboard {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     background: var(--bg);
     min-height: 100vh;
-    padding: 32px 28px;
+    padding: 24px;
     color: var(--text-main);
 }
 
-.resident-card,
+ .resident-card,
 .card.mb-4 {
-    background: #ffffff;
-    border-radius: 16px;
+    background: var(--card-bg);
+    border-radius: 8px;
     border: 1px solid var(--border);
-    box-shadow: var(--card-shadow);
-    margin-bottom: 28px;
+    margin-bottom: 24px;
     overflow: hidden;
-    transition: box-shadow 0.25s ease;
-}
-
-.resident-card:hover,
-.card.mb-4:hover {
-    box-shadow: var(--card-shadow-hover);
 }
 
 .resident-card-header,
 .card-header {
-    background: linear-gradient(135deg, #4f46e5 0%, #3730a3 100%);
+    background: #111111;
     color: #ffffff;
-    padding: 18px 24px;
-    font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
-    font-size: 18px;
-    font-weight: 600;
-    letter-spacing: -0.01em;
-    border-bottom: none;
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border-dark);
 }
 
 .card-header h4 {
     margin: 0;
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 600;
     color: #ffffff;
+    letter-spacing: -0.01em;
 }
 
 .card-body {
-    padding: 24px;
+    padding: 20px;
+    background: #ffffff;
 }
 
 .card-body p {
-    margin-bottom: 12px;
-    font-size: 14.5px;
+    margin-bottom: 10px;
+    font-size: 14px;
     color: var(--text-main);
     display: flex;
-    align-items: baseline;
-    gap: 8px;
+    align-items: center;
+    gap: 12px;
 }
 
 .card-body p:last-child {
@@ -75,104 +61,127 @@
 }
 
 .card-body p b {
-    min-width: 110px;
+    min-width: 120px;
     font-weight: 600;
     color: var(--text-muted);
-    font-size: 13px;
+    font-size: 12px;
     text-transform: uppercase;
-    letter-spacing: 0.03em;
+    letter-spacing: 0.05em;
 }
 
-.action-box {
+ .action-box {
     display: flex;
-    gap: 14px;
-    margin-bottom: 28px;
+    gap: 12px;
+    margin-bottom: 24px;
     flex-wrap: wrap;
 }
 
-.action-box button {
-    border: none;
-    border-radius: 12px;
-    padding: 13px 26px;
+.action-box button,
+#problem_list .btn,
+.btn {
+    border-radius: 6px;
+    padding: 9px 18px;
     font-family: 'Inter', sans-serif;
-    font-weight: 600;
-    font-size: 14.5px;
-    letter-spacing: -0.01em;
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    font-weight: 500;
+    font-size: 13.5px;
+    transition: all 0.15s ease;
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    cursor: pointer;
 }
 
-.action-box button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px -4px rgba(0,0,0,0.15);
+ #add_problem,
+.btn-primary {
+    background: #111111 !important;
+    color: #ffffff !important;
+    border: 1px solid #111111 !important;
 }
 
-.action-box button:active {
-    transform: translateY(0);
+#add_problem:hover,
+.btn-primary:hover {
+    background: #333333 !important;
+    border-color: #333333 !important;
 }
 
-#add_problem {
-    background: linear-gradient(135deg, #4f46e5, #4338ca);
-    color: #ffffff;
+#track_problem,
+.btn-success {
+    background: #ffffff !important;
+    color: #111111 !important;
+    border: 1px solid #111111 !important;
 }
 
-#add_problem:hover {
-    background: linear-gradient(135deg, #4338ca, #3730a3);
+#track_problem:hover,
+.btn-success:hover {
+    background: #f4f4f4 !important;
 }
 
-#track_problem {
-    background: linear-gradient(135deg, #059669, #047857);
-    color: #ffffff;
+.btn-secondary {
+    background: #ffffff !important;
+    color: #111111 !important;
+    border: 1px solid var(--border) !important;
 }
 
-#track_problem:hover {
-    background: linear-gradient(135deg, #047857, #065f46);
+.btn-secondary:hover:not(:disabled) {
+    background: #f4f4f4 !important;
+    border-color: #111111 !important;
 }
 
-#problem_list {
-    margin-top: 8px;
+.btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.btn-info {
+    background: #ffffff !important;
+    color: #111111 !important;
+    border: 1px solid var(--border) !important;
+}
+
+.btn-info:hover {
+    background: #f4f4f4 !important;
+}
+
+ #problem_list {
+    margin-top: 12px;
+    width: 100%;
+    overflow-x: auto;
 }
 
 #problem_list h3 {
-    font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 600;
     color: var(--text-main);
-    margin-bottom: 16px;
-    letter-spacing: -0.02em;
+    margin-bottom: 14px;
+    letter-spacing: -0.01em;
 }
 
 #problem_list table {
     background: #ffffff;
-    border-radius: 14px;
+    border-radius: 6px;
     overflow: hidden;
     border: 1px solid var(--border);
-    box-shadow: var(--card-shadow);
     width: 100%;
-    border-collapse: separate;
-    border-spacing: 0;
+    border-collapse: collapse;
 }
 
 #problem_list thead th {
-    background: #f1f5f9;
-    color: var(--text-muted);
+    background: #fafafa;
+    color: #111111;
     font-size: 12px;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.04em;
-    padding: 14px 16px;
+    padding: 12px 14px;
     border-bottom: 1px solid var(--border);
     white-space: nowrap;
 }
 
 #problem_list tbody td {
-    padding: 14px 16px;
-    font-size: 14px;
+    padding: 12px 14px;
+    font-size: 13.5px;
     color: var(--text-main);
-    border-bottom: 1px solid #f1f5f9;
+    border-bottom: 1px solid var(--border);
     vertical-align: middle;
 }
 
@@ -181,38 +190,10 @@
 }
 
 #problem_list tbody tr:hover {
-    background: #f8fafc;
+    background: #fafafa;
 }
 
-#problem_list td:nth-child(4) {
-    font-weight: 500;
-}
-
-@media (max-width: 768px) {
-    .resident-dashboard {
-        padding: 20px 16px;
-    }
-
-    .action-box {
-        flex-direction: column;
-    }
-
-    .action-box button {
-        width: 100%;
-        justify-content: center;
-    }
-
-    .card-body p {
-        flex-direction: column;
-        gap: 2px;
-    }
-
-    .card-body p b {
-        min-width: auto;
-    }
-}
-
-.p-pending {
+ .p-pending {
     background: #ff0004;
     color: white;
     padding: 4px 10px;
@@ -251,12 +232,48 @@
     border-radius: 20px;
     font-weight: 600;
 }
-#problem_list {
-    width: 100%;
-    overflow-x: auto;
+
+@media (max-width: 768px) {
+    .resident-dashboard {
+        padding: 16px;
+    }
+
+    .action-box {
+        flex-direction: column;
+    }
+
+    .action-box button {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .card-body p {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 2px;
+    }
+
+    .card-body p b {
+        min-width: auto;
+    }
+}
+/* Distinct Image View Buttons */
+.btn-complaint-img {
+    background-color: #2563eb !important; /* Royal Blue */
+    color: #ffffff !important;
+    border: none !important;
 }
 
-.table-responsive {
-    overflow-x: auto;
-    width: 100%;
+.btn-complaint-img:hover {
+    background-color: #1d4ed8 !important;
+}
+
+.btn-completion-img {
+    background-color: #0d9488 !important; /* Teal */
+    color: #ffffff !important;
+    border: none !important;
+}
+
+.btn-completion-img:hover {
+    background-color: #0f766e !important;
 }

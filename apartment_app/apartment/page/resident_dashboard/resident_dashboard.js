@@ -109,7 +109,7 @@ frappe.pages['resident_dashboard'].on_page_load = function (wrapper) {
 
                 let html = `
                     <h3 class="mt-4">My Problems</h3>
-                    <table class="table table-bordered table-striped">
+                    <table class="table">
                         <thead>
                             <tr>
                                 <th>Problem ID</th>
@@ -128,7 +128,7 @@ frappe.pages['resident_dashboard'].on_page_load = function (wrapper) {
                 `;
 
                 if (problems.length === 0) {
-                    html += `<tr><td colspan="10" class="text-center">No problems reported yet.</td></tr>`;
+                    html += `<tr><td colspan="10" class="text-center text-muted">No problems reported yet.</td></tr>`;
                 } else {
                     problems.forEach(function (p) {
                         let status_classs = "";
@@ -142,14 +142,9 @@ frappe.pages['resident_dashboard'].on_page_load = function (wrapper) {
 
                         let status_class = (p.over_due === "YES") ? "status-pending" : "status-completed";
 
-                        let complaint_img_btn = p.complaint_image 
-                            ? `<button class="btn btn-sm btn-info view-img-btn" data-img="${p.complaint_image}">View</button>` 
-                            : "-";
-                        
-                        let completion_img_btn = p.completion_image 
-                            ? `<button class="btn btn-sm btn-success view-img-btn" data-img="${p.completion_image}">View</button>` 
-                            : "-";
+                       let complaint_img_btn = p.complaint_image ? `<button class="btn btn-sm btn-complaint-img view-img-btn" data-img="${p.complaint_image}">View </button>` : "-";
 
+                        let completion_img_btn = p.completion_image  ? `<button class="btn btn-sm btn-completion-img view-img-btn" data-img="${p.completion_image}">View </button>` : "-";
                         html += `
                             <tr>
                                 <td>${p.problem_id || "-"}</td>
@@ -182,7 +177,7 @@ frappe.pages['resident_dashboard'].on_page_load = function (wrapper) {
 
                 $("#problem_list").html(html);
 
-                 $(".view-img-btn").click(function () {
+                $(".view-img-btn").click(function () {
                     let img_url = $(this).data("img");
                     let img_dialog = new frappe.ui.Dialog({
                         title: "Image Preview",
