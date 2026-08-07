@@ -54,9 +54,9 @@
   },
   {
    "fieldname": "category",
-   "fieldtype": "Select",
+   "fieldtype": "Table",
    "label": "category",
-   "options": "Plumbing\nElectrical\nTech\nGas\nCleaning Services"
+   "options": "Technician skill"
   },
   {
    "fieldname": "email",
@@ -68,7 +68,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-08-04 16:16:10.528088",
+ "modified": "2026-08-07 10:34:06.303332",
  "modified_by": "Administrator",
  "module": "Apartment",
  "name": "Technician",
@@ -116,5 +116,8 @@
  "rows_threshold_for_grid_search": 20,
  "sort_field": "creation",
  "sort_order": "DESC",
- "states": []
+ "states": [],
+ "track_changes": 1,
+ "track_seen": 1,
+ "track_views": 1
 }

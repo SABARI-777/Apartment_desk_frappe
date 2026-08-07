@@ -13,7 +13,8 @@
   "status",
   "priority",
   "due_date",
-  "late_count"
+  "late_count",
+  "completion_image"
  ],
  "fields": [
   {
@@ -59,13 +60,18 @@
    "fieldtype": "Int",
    "in_list_view": 1,
    "label": "late_count"
+  },
+  {
+   "fieldname": "completion_image",
+   "fieldtype": "Attach",
+   "label": "completion_image"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2026-07-30 14:50:18.101285",
+ "modified": "2026-08-06 14:37:00.397678",
  "modified_by": "Administrator",
  "module": "Apartment",
  "name": "Tech-tasks",

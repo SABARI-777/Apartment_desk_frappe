@@ -41,12 +41,11 @@ def get_problems(start=0, page_length=10):
                     "problem_id": row.problem_id,
                     "resisdents": resident.name,
                     "technicians": "-",
-                    "status": row.status
+                    "status": row.status,
+                    "complaint_image": row.complaint_image,
                 })
 
-
     total = len(data)
-    data.reverse()
     paginated_data = data[start:start + page_length]
 
     return {
@@ -74,7 +73,7 @@ def get_assigned_tasks(start=0, page_length=10):
                     "status": row.status,
                     "priority": row.priority,
                     "date": row.date,
-                    "due_date":row.due_date
+                    "due_date": row.due_date,
                 })
 
     total = len(data)
@@ -104,7 +103,8 @@ def get_problems_completed(start=0, page_length=10):
                     "resisdents": row.resident,
                     "technicians": technician.name,
                     "status": row.status,
-                    "priority": row.priority
+                    "priority": row.priority,
+                    "completion_image": row.completion_image,
                 })
 
     total = len(data)
@@ -136,7 +136,7 @@ def add_announcement(apartment_name, message, from_date, to_date):
     row.to_date = to_date
 
     apartment.save(ignore_permissions=True)
-
+ 
     return "Announcement Published Successfully"
 
 
@@ -167,7 +167,6 @@ def get_all_residents(start=0, page_length=10):
         page_length=page_length
     )
     
-    # residents.reverse()
     total = frappe.db.count("Resident")
 
     return {
@@ -175,9 +174,9 @@ def get_all_residents(start=0, page_length=10):
         "total": total
     }
 
-
 @frappe.whitelist()
 def get_all_technician(start=0, page_length=10):
+
     start = int(start)
     page_length = int(page_length)
 
@@ -187,21 +186,27 @@ def get_all_technician(start=0, page_length=10):
             "name",
             "name1",
             "technician_id",
-            "category",
             "phone",
             "email"
         ],
         start=start,
         page_length=page_length
     )
-    # technicians.reverse()
+
     total = frappe.db.count("Technician")
+
+    for tech in technicians:
+        doc = frappe.get_doc("Technician", tech.name)
+        tech["category"] = []
+        for row in doc.category:
+            tech["category"].append({
+                "skill": row.skill
+            })
 
     return {
         "data": technicians,
         "total": total
     }
-
 
 @frappe.whitelist()
 def get_problem_ids():
@@ -229,11 +234,10 @@ def get_problem_ids():
 
 
 @frappe.whitelist()
-def assign_technician(problem_id, resident, technician, priority,due_date):
+def assign_technician(problem_id, technician, resident, priority, due_date):
     technician_doc = frappe.get_doc("Technician", technician)
 
     row = technician_doc.append("tasks", {})
-
     row.problem_id = problem_id
     row.resident = resident
     row.date = frappe.utils.now_datetime()
@@ -249,13 +253,18 @@ def assign_technician(problem_id, resident, technician, priority,due_date):
     )
 
     task = faculty.append("task", {})
-
     task.problem_id = problem_id
     task.resisdents = resident
     task.technicians = technician
     task.status = "Assign"
 
     faculty.save(ignore_permissions=True)
+    residents = frappe.get_doc("Resident", resident)
+
+    residents.add_comment(
+        "Info",
+        f"Problem ID {problem_id} assigned to Technician {technician} by Faculty."
+    )
+ 
 
     return "Technician Assigned Successfully"
-    

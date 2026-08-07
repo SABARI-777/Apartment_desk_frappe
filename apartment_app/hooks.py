@@ -260,8 +260,13 @@ app_license = "mit"
 # ]
 scheduler_events = {
     "cron": {
-        "* * * * *": [
-            "apartment_app.tasks.send_daily_faculty_report"
+        "0 9 * * *": [
+            "apartment_app.tasks.send_daily_faculty_report",
+            "apartment_app.tasks.check_pending",
+            "apartment_app.tasks.overdue_check",
         ]
     }
 }
+app_include_js = [
+    "/assets/apartment_app/js/resident_overview.js"
+]

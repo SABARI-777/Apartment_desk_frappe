@@ -35,17 +35,26 @@ def get_problems(start=0, page_length=10,name=None):
     data = []
 
     for row in technician.tasks:
-
+        print(row.status)
+        doc = frappe.db.get_value(
+            "problems",
+            {"problem_id": row.problem_id},
+            ["complaint_image"],
+            as_dict=True
+        )
+        complaint_image = doc.complaint_image if doc else None
+ 
         if row.status.lower() != "completed":
-
             data.append({
                 "problem_id": row.problem_id,
                 "resident": row.resident,
                 "date": row.date,
                 "status": row.status,
-                "due_date":row.due_date,
-                "priority":row.priority
+                "due_date": row.due_date,
+                "priority": row.priority,
+                "complaint_image": complaint_image,
             })
+
     
     start = int(start)
     page_length = int(page_length)
@@ -90,7 +99,7 @@ def get_problem_ids(name=None):
 
 
 @frappe.whitelist()
-def update_task(problem_id, resident, status):
+def update_task(problem_id, resident, status,completion_image):
 
     technician = frappe.get_doc(
         "Technician",
@@ -104,6 +113,7 @@ def update_task(problem_id, resident, status):
 
             row.status = status
             row.date = now_datetime()
+            row.completion_image = completion_image
 
             if row.due_date:
                 if getdate(row.date) > getdate(row.due_date):
@@ -115,14 +125,17 @@ def update_task(problem_id, resident, status):
 
             break
 
+
     technician.save(ignore_permissions=True)
+    oldstatus = ''
 
     resident_doc = frappe.get_doc("Resident", resident)
 
     for row in resident_doc.problems:
         if row.problem_id == problem_id:
-
+            oldstatus = row.status
             row.status = status
+            row.completion_image=completion_image
             row.completed_date = now_datetime()
 
             if row.date_time:
@@ -134,6 +147,11 @@ def update_task(problem_id, resident, status):
 
             break
     print(is_over_due)
+
+    resident_doc.add_comment(
+    "Edit",
+    f"technicain change Status from {oldstatus} to {status}."
+)
     resident_doc.save(ignore_permissions=True)
 
     return "Task Updated Successfully"
@@ -161,7 +179,8 @@ def get_completed_tasks(start=0, page_length=10,name=None):
                 "resident": row.resident,
                 "date": row.date,
                 "status": row.status,
-                "priority":row.priority
+                "priority":row.priority,
+                "completion_image":row.completion_image,
             })
 
     start = int(start)
@@ -175,21 +194,25 @@ def get_completed_tasks(start=0, page_length=10,name=None):
         "data": completed[start:start + page_length],
         "total": total
     }
-
 @frappe.whitelist()
 def get_latecount(name=None):
-    count =0;
     if name:
-        technician = frappe.get_doc("Technician", name)
+        technician = name
     else:
-        technician = frappe.get_doc(
-        "Technician",
-        {"email": frappe.session.user}
-    )
+        technician = frappe.db.get_value(
+            "Technician",
+            {"email": frappe.session.user},
+            "name"
+        )
 
-    for row in technician.tasks:
-        if row.late_count>0:
-            count+=1
-    
+    if not technician:
+        return 0
+
+    count = frappe.db.sql("""
+        SELECT COUNT(*)
+        FROM `tabTech-tasks`
+        WHERE parent = %s
+        AND late_count > 0
+    """, (technician,), as_list=True)[0][0]
+
     return count
-

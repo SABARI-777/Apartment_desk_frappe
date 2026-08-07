@@ -251,3 +251,12 @@
     border-radius: 20px;
     font-weight: 600;
 }
+#problem_list {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.table-responsive {
+    overflow-x: auto;
+    width: 100%;
+}

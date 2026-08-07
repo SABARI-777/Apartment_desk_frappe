@@ -14,7 +14,9 @@
   "total_time",
   "completed_date",
   "status",
-  "over_due"
+  "over_due",
+  "complaint_image",
+  "completion_image"
  ],
  "fields": [
   {
@@ -70,13 +72,25 @@
    "in_list_view": 1,
    "label": "over_due",
    "options": "YES\nNO"
+  },
+  {
+   "fieldname": "complaint_image",
+   "fieldtype": "Attach",
+   "in_list_view": 1,
+   "label": "Complaint Image"
+  },
+  {
+   "fieldname": "completion_image",
+   "fieldtype": "Attach",
+   "in_list_view": 1,
+   "label": "Completion Image"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2026-07-31 10:17:49.661722",
+ "modified": "2026-08-06 12:50:09.051996",
  "modified_by": "Administrator",
  "module": "Apartment",
  "name": "problems",

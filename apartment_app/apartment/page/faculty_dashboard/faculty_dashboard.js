@@ -50,9 +50,14 @@ frappe.pages['faculty_dashboard'].on_page_load = function (wrapper) {
 
         $("#assign_technician").click(function () {
             open_assign_dialog();
+            load_all_modules();
         });
         $("#add_announcement").click(function () {
             open_announcement_dialog();
+        });
+        $(document).on("click", ".assign-btn", function () {
+            let problem_id = $(this).data("problem");
+            open_assign_dialog(problem_id);
         });
     }
 
@@ -76,7 +81,7 @@ frappe.pages['faculty_dashboard'].on_page_load = function (wrapper) {
         });
     }
 
-     function loadResidents() {
+    function loadResidents() {
         frappe.call({
             method: "apartment_app.apartment.page.faculty_dashboard.faculty_dashboard.get_all_residents",
             args: {
@@ -143,7 +148,7 @@ frappe.pages['faculty_dashboard'].on_page_load = function (wrapper) {
         });
     }
 
-     function loadTechnicians() {
+    function loadTechnicians() {
         frappe.call({
             method: "apartment_app.apartment.page.faculty_dashboard.faculty_dashboard.get_all_technician",
             args: {
@@ -219,7 +224,7 @@ frappe.pages['faculty_dashboard'].on_page_load = function (wrapper) {
         });
     }
 
-     function loadPendingTasks() {
+    function loadPendingTasks() {
         frappe.call({
             method: "apartment_app.apartment.page.faculty_dashboard.faculty_dashboard.get_problems",
             args: {
@@ -244,6 +249,7 @@ frappe.pages['faculty_dashboard'].on_page_load = function (wrapper) {
                         <th>Technician</th>
                         <th>Status</th>
                         <th>Priority</th>
+                        <th>Complaint Image</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -256,11 +262,23 @@ frappe.pages['faculty_dashboard'].on_page_load = function (wrapper) {
 
             html += `
                 <tr>
-                    <td>${p.problem_id}</td>
+                  <td>
+                    ${p.problem_id}
+                    <button class="btn btn-sm btn-primary assign-btn"
+                        data-problem="${p.problem_id}">
+                        Assign
+                    </button>
+                </td>
                     <td>${p.resisdents}</td>
                     <td>Not-Assign</td>
-                     <td><span class="${status_class}">${p.status}</span></td>
+                    <td><span class="${status_class}">${p.status}</span></td>
                     <td>Not-Assign</td>
+                    <td>
+                        <button class="btn btn-sm btn-primary view-image-btn"
+                            data-image="${p.complaint_image}">
+                            View Image
+                        </button>
+                    </td>
                 </tr>
             `;
         });
@@ -274,6 +292,28 @@ frappe.pages['faculty_dashboard'].on_page_load = function (wrapper) {
             </div>
         `;
         $("#problem_list").html(html);
+        
+        $(".view-image-btn").click(function () {
+            let image = $(this).data("image");
+
+            let d = new frappe.ui.Dialog({
+                title: "Completion Image",
+                size: "large",
+                fields: [
+                    {
+                        fieldtype: "HTML",
+                        options: `
+                            <div style="text-align:center;">
+                                <img src="${image}"
+                                    style="width:300px;height:300px;">
+                            </div>
+                        `
+                    }
+                ]
+            });
+
+            d.show();
+        });
 
         $("#prev_pending_page").prop("disabled", pending_page === 1).click(function () {
             if (pending_page > 1) {
@@ -306,8 +346,6 @@ frappe.pages['faculty_dashboard'].on_page_load = function (wrapper) {
     function show_assigned_tasks(problems, total) {
         let total_pages = Math.ceil(total / page_length) || 1;
         
-        
-        
         let html = `
         <h3 class="mt-4">Assigned and In Progress Tasks</h3>
         <table class="table table-bordered table-striped">
@@ -323,7 +361,7 @@ frappe.pages['faculty_dashboard'].on_page_load = function (wrapper) {
         </tr>
         </thead>
         <tbody>
-                        `;
+        `;
         problems.forEach(function (p) {
             let status_class = "";
     
@@ -334,14 +372,16 @@ frappe.pages['faculty_dashboard'].on_page_load = function (wrapper) {
             } else if (p.priority === "Low") {
                 status_class = "status-completed";
             }
-             let status_classs = "";
-              if (p.status === "pending") {
+            
+            let status_classs = "";
+            if (p.status === "pending") {
                 status_classs = "p-pending";
             } else if (p.status === "inprogress") {
                 status_classs = "p-progress";
             } else if (p.status === "completed") {
                 status_classs = "p-completed";
             }
+            
             const dueDate = new Date(p.due_date);
             const now = new Date();
             const dueClass = dueDate < now ? "overdue" : "ontime";
@@ -409,13 +449,13 @@ frappe.pages['faculty_dashboard'].on_page_load = function (wrapper) {
                         <th>Technician</th>
                         <th>Status</th>
                         <th>Priority</th>
+                        <th>Completed Image</th>
                     </tr>
                 </thead>
                 <tbody>
         `;
         problems.forEach(function (p) {
-             let status_class = "";
-    
+            let status_class = "";
             if (p.priority === "High") {
                 status_class = "status-pending";
             } else if (p.priority === "Medium") {
@@ -423,14 +463,16 @@ frappe.pages['faculty_dashboard'].on_page_load = function (wrapper) {
             } else if (p.priority === "Low") {
                 status_class = "status-completed";
             }
-                let status_classs = "";
-              if (p.status === "pending") {
+            
+            let status_classs = "";
+            if (p.status === "pending") {
                 status_classs = "p-pending";
             } else if (p.status === "inprogress") {
                 status_classs = "p-progress";
             } else if (p.status === "completed") {
                 status_classs = "p-completed";
             }
+            
             html += `
                 <tr>
                     <td>${p.problem_id}</td>
@@ -438,6 +480,12 @@ frappe.pages['faculty_dashboard'].on_page_load = function (wrapper) {
                     <td>${p.technicians}</td>
                     <td><span class="${status_classs}">${p.status}</span></td>
                     <td><span class="${status_class}">${p.priority}</span></td>
+                    <td>
+                        <button class="btn btn-sm btn-primary view-image-btn"
+                            data-image="${p.completion_image}">
+                            View Image
+                        </button>
+                    </td>
                 </tr>
             `;
         });
@@ -451,6 +499,28 @@ frappe.pages['faculty_dashboard'].on_page_load = function (wrapper) {
             </div>
         `;
         $("#completed_problem_list").html(html);
+
+        $(".view-image-btn").click(function () {
+            let image = $(this).data("image");
+
+            let d = new frappe.ui.Dialog({
+                title: "Completion Image",
+                size: "large",
+                fields: [
+                    {
+                        fieldtype: "HTML",
+                        options: `
+                            <div style="text-align:center;">
+                                <img src="${image}"
+                                    style="width:300px;height:300px;">
+                            </div>
+                        `
+                    }
+                ]
+            });
+
+            d.show();
+        });
 
         $("#prev_completed_page").prop("disabled", completed_page === 1).click(function () {
             if (completed_page > 1) {
@@ -483,7 +553,7 @@ frappe.pages['faculty_dashboard'].on_page_load = function (wrapper) {
         $("#faculty_details").html(html);
     }
 
-    function open_assign_dialog() {
+    function open_assign_dialog(selected_problem = null) {
         let problem_data = [];
         let technician_data = [];
         let dialog = new frappe.ui.Dialog({
@@ -503,7 +573,9 @@ frappe.pages['faculty_dashboard'].on_page_load = function (wrapper) {
                             dialog.set_value("category", row.category);
 
                             let technicians = technician_data
-                                .filter(t => t.category == row.category)
+                                .filter(t =>
+                                    t.category.some(c => c.skill === row.category)
+                                )
                                 .map(t => t.name);
 
                             if (technicians.length > 0) {
@@ -519,7 +591,7 @@ frappe.pages['faculty_dashboard'].on_page_load = function (wrapper) {
                 { label: "Resident", fieldname: "resident", fieldtype: "Data", read_only: 1 },
                 { label: "Category", fieldname: "category", fieldtype: "Data", read_only: 1 },
                 { label: "Technician", fieldname: "technician", fieldtype: "Select", options: "", reqd: 1 },
-                { label: "Due Date", fieldname: "due_date", fieldtype: "Date",reqd: 1 },
+                { label: "Due Date", fieldname: "due_date", fieldtype: "Date", reqd: 1 },
                 { label: "Status", fieldname: "status", fieldtype: "Select", options: "\nAssign\nNotAssign", reqd: 1 },
                 { label: "Priority", fieldname: "priority", fieldtype: "Select", options: "\nHigh\nMedium\nLow", reqd: 1 }
             ],
@@ -537,12 +609,12 @@ frappe.pages['faculty_dashboard'].on_page_load = function (wrapper) {
                         resident: values.resident,
                         technician: values.technician,
                         priority: values.priority,
-                        due_date:values.due_date
+                        due_date: values.due_date
                     },
                     callback: function (r) {
                         frappe.msgprint(r.message);
                         dialog.hide();
-                        location.reload();
+                        load_all_modules();
                     }
                 });
             }
@@ -555,6 +627,10 @@ frappe.pages['faculty_dashboard'].on_page_load = function (wrapper) {
                 problem_data = r.message;
                 let problems = problem_data.map(d => d.problem_id);
                 dialog.set_df_property("problem_id", "options", problems);
+
+                if (selected_problem) {
+                    dialog.set_value("problem_id", selected_problem);
+                }
             }
         });
 
@@ -569,37 +645,36 @@ frappe.pages['faculty_dashboard'].on_page_load = function (wrapper) {
         });
     }
 
-    function open_announcement_dialog() {
-        let dialog = new frappe.ui.Dialog({
-            title: "Add Announcement",
-            fields: [
-                { label: "Apartment Name", fieldname: "apartment_name", fieldtype: "Select", options: "", reqd: 1 },
-                { label: "Message", fieldname: "message", fieldtype: "Small Text", reqd: 1 },
-                { label: "From Date", fieldname: "from_date", fieldtype: "Datetime", default: frappe.datetime.now_datetime(), reqd: 1 },
-                { label: "To Date", fieldname: "to_date", fieldtype: "Datetime", reqd: 1 }
-            ],
-            primary_action_label: "Publish",
-            primary_action(values) {
-                frappe.call({
-                    method: "apartment_app.apartment.page.faculty_dashboard.faculty_dashboard.add_announcement",
-                    args: values,
-                    callback: function (r) {
-                        frappe.msgprint(r.message);
-                        dialog.hide();
-                        location.reload();
-                    }
-                });
-            }
-        });
-        dialog.show();
+   function open_announcement_dialog() {
+    let dialog = new frappe.ui.Dialog({
+        title: "Add Announcement",
+        fields: [
+            { label: "Apartment Name", fieldname: "apartment_name", fieldtype: "Select", options: "", reqd: 1 },
+            { label: "Message", fieldname: "message", fieldtype: "Small Text", reqd: 1 },
+            { label: "From Date", fieldname: "from_date", fieldtype: "Datetime", default: frappe.datetime.now_datetime(), reqd: 1 },
+            { label: "To Date", fieldname: "to_date", fieldtype: "Datetime", reqd: 1 }
+        ],
+        primary_action_label: "Publish",
+        primary_action(values) {
+            frappe.call({
+                method: "apartment_app.apartment.page.faculty_dashboard.faculty_dashboard.add_announcement",
+                args: values,
+                callback: function (r) {
+                    frappe.msgprint(r.message);
+                    dialog.hide();
+                 }
+            });
+        }
+    });
+    dialog.show();
 
-        frappe.call({
-            method: "apartment_app.apartment.page.faculty_dashboard.faculty_dashboard.get_apartments",
-            callback: function (r) {
-                let apartment_data = r.message;
-                let apartments = apartment_data.map(a => a.name);
-                dialog.set_df_property("apartment_name", "options", apartments);
-            }
-        });
-    }
+    frappe.call({
+        method: "apartment_app.apartment.page.faculty_dashboard.faculty_dashboard.get_apartments",
+        callback: function (r) {
+            let apartment_data = r.message;
+            let apartments = apartment_data.map(a => a.name);
+            dialog.set_df_property("apartment_name", "options", apartments);
+        }
+    });
+}
 };

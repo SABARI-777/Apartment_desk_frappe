@@ -75,6 +75,8 @@ frappe.pages['technician_dashboard'].on_page_load = function (wrapper) {
         if (!technician_name) {
             $("#update_status").click(function () {
                 open_update_dialog();
+                 loadProblems();
+                loadHistory();
             });
         }
     }
@@ -100,6 +102,8 @@ frappe.pages['technician_dashboard'].on_page_load = function (wrapper) {
     });
 
     function show_technician_details(technician) {
+        console.log(technician);
+        
         let html = `
             <div class="card mb-4">
                 <div class="card-header">
@@ -108,7 +112,7 @@ frappe.pages['technician_dashboard'].on_page_load = function (wrapper) {
                 <div class="card-body">
                     <p><b>Name:</b> ${technician.name1}</p>
                     <p><b>Technician ID:</b> ${technician.technician_id}</p>
-                    <p><b>Category:</b> ${technician.category}</p>
+                 <p><b>Category:</b> ${technician.category.map(c => c.skill).join(", ")}</p>
                     <p><b>Mobile:</b> ${technician.phone}</p>
                     <p><b>Email:</b> ${technician.email}</p>
                      <p><b>Late count:</b> ${tot}</p>
@@ -281,6 +285,7 @@ frappe.pages['technician_dashboard'].on_page_load = function (wrapper) {
                     <th>Status</th>
                      <th>Due Date</th>
                     <th>Priority</th>
+                      <th>Complaint image</th>
                 </tr>
             </thead>
             <tbody>
@@ -330,13 +335,19 @@ frappe.pages['technician_dashboard'].on_page_load = function (wrapper) {
                      <td><span class="${status_classs}">${p.status}</span></td>
                     <td class="${dueClass}">${p.due_date}</td>
                      <td><span class="${status_class}">${p.priority}</span></td>
+                   <td>
+                    <button class="btn btn-sm btn-primary view-image-btn"
+                        data-image="${p.complaint_image}">
+                        View Image
+                    </button>
+                </td>
                 </tr>
             `;
+            
 
                 });
 
             }
-
             html += `
             </tbody>
         </table>
@@ -371,6 +382,29 @@ frappe.pages['technician_dashboard'].on_page_load = function (wrapper) {
     `;
 
             $("#problem_list").html(html);
+                 
+
+                $(".view-image-btn").click(function () {
+                    let image = $(this).data("image");
+
+                    let d = new frappe.ui.Dialog({
+                        title: "Complaint Image",
+                        size: "large",
+                        fields: [
+                            {
+                                fieldtype: "HTML",
+                                options: `
+                                    <div style="text-align:center;">
+                                        <img src="${image}"
+                                            style="width:300px;height:300px;">
+                                    </div>
+                                `
+                            }
+                        ]
+                    });
+
+                    d.show();
+                });
 
             $("#prev_page").click(function () {
 
@@ -409,6 +443,7 @@ frappe.pages['technician_dashboard'].on_page_load = function (wrapper) {
         }
 
     }
+   
 
     function loadHistory() {
 
@@ -470,6 +505,12 @@ frappe.pages['technician_dashboard'].on_page_load = function (wrapper) {
                     fieldtype: "Select",
                     options: "\npending\ninprogress\ncompleted",
                     reqd: 1
+                },
+                {
+                    label: "Completion Image",
+                    fieldname: "completion_image",
+                    fieldtype: "Attach",
+                    reqd:1
                 }
             ],
             primary_action_label: "Submit",
@@ -479,13 +520,13 @@ frappe.pages['technician_dashboard'].on_page_load = function (wrapper) {
                     args: {
                         problem_id: values.problem_id,
                         resident: values.resident,
-                        status: values.status
+                        status: values.status,
+                        completion_image:values.completion_image,
                     },
                     callback: function (r) {
                         frappe.msgprint(r.message);
                         dialog.hide();
-                        location.reload();
-                    }
+                     }
                 });
             }
         });
@@ -505,9 +546,9 @@ frappe.pages['technician_dashboard'].on_page_load = function (wrapper) {
                     options.push(row.problem_id);
                 });
                 dialog.set_df_property("problem_id", "options", options.join("\n"));
-                dialog.refresh();
+                
             }
         });
+        
     }
 };
-

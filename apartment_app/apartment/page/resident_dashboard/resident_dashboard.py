@@ -12,8 +12,6 @@ def check_resident():
 
     return resident
 
-
-
 @frappe.whitelist()
 def get_resident_details():
     return frappe.get_doc(
@@ -43,6 +41,8 @@ def get_problems(start=0, page_length=10):
             if row.completed_date else None
             ),
             "completed_date": row.completed_date,
+            "complaint_image":row.complaint_image,
+            "completion_image":row.completion_image,
             "over_due":row.over_due
         })
 
@@ -61,7 +61,7 @@ def get_problems(start=0, page_length=10):
     
 
 @frappe.whitelist()
-def add_problem(problem,category):
+def add_problem(problem,category,complaint_image):
 
     resident_name = frappe.db.get_value(
         "Resident",
@@ -80,11 +80,21 @@ def add_problem(problem,category):
     
     row.problem = problem
     row.category = category
- 
+    row.complaint_image = complaint_image
     row.status = "pending"
     row.date_time = now_datetime()
     row.over_due = "NO"
-
+   
     resident.save(ignore_permissions=True)
+
+
+    faculty_doc = frappe.get_doc("Faculty","FTY-0063")
+
+    faculty_doc.add_comment(
+    "Edit",
+    f"RESIDNET {resident_name} ADD problem{row.problem_id} go and assign technicians."
+    )
+
+    faculty_doc.save(ignore_permissions=True)
 
     return "Problem Added Successfully!"
