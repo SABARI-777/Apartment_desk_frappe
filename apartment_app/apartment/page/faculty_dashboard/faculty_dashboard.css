@@ -1,84 +1,128 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap');
 
+/* ==========================================================================
+   Design Tokens & Variables
+   ========================================================================== */
 :root {
-    --primary: #7c3aed;
-    --primary-dark: #6d28d9;
-    --primary-light: #ede9fe;
-    --success: #059669;
-    --success-dark: #047857;
+    /* Brand Colors */
+    --primary: #6366f1;
+    --primary-hover: #4f46e5;
+    --primary-light: #eef2ff;
+    --primary-glow: rgba(99, 102, 241, 0.25);
+
+    --success: #10b981;
+    --success-hover: #059669;
+    --success-light: #ecfdf5;
+    --success-glow: rgba(16, 185, 129, 0.25);
+
+    --warning: #f59e0b;
+    --warning-light: #fffbeb;
+    
+    --danger: #ef4444;
+    --danger-light: #fef2f2;
+
+    /* Neutral System */
     --text-main: #0f172a;
     --text-muted: #64748b;
+    --text-white: #ffffff;
+    
+    --bg-main: #f8fafc;
+    --bg-card: #ffffff;
+    --bg-header: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    --bg-hover: #f1f5f9;
     --border: #e2e8f0;
-    --bg: #f8fafc;
-    --card-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 10px 15px -3px rgba(0,0,0,0.08);
-    --card-shadow-hover: 0 12px 24px -6px rgba(0,0,0,0.12);
+
+    /* Shadows & Effects */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-card: 0 4px 20px -2px rgba(15, 23, 42, 0.06), 0 2px 6px -1px rgba(15, 23, 42, 0.03);
+    --shadow-hover: 0 20px 25px -5px rgba(15, 23, 42, 0.1), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+    
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-full: 9999px;
+
+    --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* ==========================================================================
+   Dashboard Main Container
+   ========================================================================== */
 .faculty-dashboard {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    background: var(--bg);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: var(--bg-main);
     min-height: 100vh;
-    padding: 32px 28px;
+    padding: 40px 32px;
     color: var(--text-main);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
 }
 
 .faculty-dashboard h1 {
     font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 24px;
-    font-weight: 700;
+    font-size: 28px;
+    font-weight: 800;
     color: var(--text-main);
-    margin-bottom: 24px;
+    margin-bottom: 32px;
     letter-spacing: -0.03em;
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }
 
 .faculty-dashboard h3 {
     font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 17px;
-    font-weight: 600;
+    font-size: 18px;
+    font-weight: 700;
     color: var(--text-main);
-    margin: 28px 0 14px 0;
+    margin: 36px 0 16px 0;
     letter-spacing: -0.02em;
 }
 
- .card.mb-4 {
-    background: #ffffff;
-    border-radius: 16px;
+/* ==========================================================================
+   Card Components
+   ========================================================================== */
+.card.mb-4 {
+    background: var(--bg-card);
+    border-radius: var(--radius-lg);
     border: 1px solid var(--border);
-    box-shadow: var(--card-shadow);
-    margin-bottom: 28px;
+    box-shadow: var(--shadow-card);
+    margin-bottom: 32px;
     overflow: hidden;
-    transition: box-shadow 0.25s ease;
+    transition: var(--transition);
 }
 
 .card.mb-4:hover {
-    box-shadow: var(--card-shadow-hover);
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-2px);
 }
 
 .card-header {
-    background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
-    color: #ffffff;
-    padding: 16px 22px;
-    border-bottom: none;
+    background: var(--bg-header);
+    color: var(--text-white);
+    padding: 20px 24px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .card-header h4 {
     margin: 0;
     font-family: 'Plus Jakarta Sans', sans-serif;
     font-size: 16px;
-    font-weight: 600;
-    color: #ffffff;
+    font-weight: 700;
+    color: var(--text-white);
+    letter-spacing: -0.01em;
 }
 
 .card-body {
-    padding: 22px;
+    padding: 24px;
 }
 
 .card-body p {
-    margin-bottom: 12px;
-    font-size: 14.5px;
+    margin-bottom: 16px;
+    font-size: 14px;
     display: flex;
-    align-items: baseline;
-    gap: 10px;
+    align-items: center;
+    gap: 12px;
 }
 
 .card-body p:last-child {
@@ -86,64 +130,72 @@
 }
 
 .card-body p b {
-    min-width: 110px;
+    min-width: 120px;
     font-weight: 600;
     color: var(--text-muted);
-    font-size: 12.5px;
+    font-size: 11px;
     text-transform: uppercase;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.06em;
 }
 
- #assign_technician,
+/* ==========================================================================
+   Action Buttons
+   ========================================================================== */
+#assign_technician,
 #add_announcement {
     border: none;
-    border-radius: 12px;
-    padding: 12px 24px;
+    border-radius: var(--radius-md);
+    padding: 12px 22px;
     font-family: 'Inter', sans-serif;
     font-weight: 600;
-    font-size: 14.5px;
+    font-size: 14px;
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 8px;
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+    transition: var(--transition);
     margin-right: 12px;
     margin-bottom: 16px;
 }
 
 #assign_technician {
-    background: linear-gradient(135deg, #7c3aed, #6d28d9);
-    color: #ffffff;
-    box-shadow: 0 2px 6px rgba(124, 58, 237, 0.3);
+    background: var(--primary);
+    color: var(--text-white);
+    box-shadow: 0 4px 12px var(--primary-glow);
 }
 
 #assign_technician:hover {
-    background: linear-gradient(135deg, #6d28d9, #5b21b6);
+    background: var(--primary-hover);
     transform: translateY(-2px);
-    box-shadow: 0 8px 20px -4px rgba(124, 58, 237, 0.4);
+    box-shadow: 0 6px 20px var(--primary-glow);
 }
 
 #add_announcement {
-    background: linear-gradient(135deg, #059669, #047857);
-    color: #ffffff;
-    box-shadow: 0 2px 6px rgba(5, 150, 105, 0.3);
+    background: var(--success);
+    color: var(--text-white);
+    box-shadow: 0 4px 12px var(--success-glow);
 }
 
 #add_announcement:hover {
-    background: linear-gradient(135deg, #047857, #065f46);
+    background: var(--success-hover);
     transform: translateY(-2px);
-    box-shadow: 0 8px 20px -4px rgba(5, 150, 105, 0.4);
+    box-shadow: 0 6px 20px var(--success-glow);
 }
 
- #problem_list table,
+/* ==========================================================================
+   Tables
+   ========================================================================== */
+#problem_list table,
 #assigned_problem_list table,
 #completed_problem_list table,
 #technician_list table,
 #residents_list table {
-    background: #ffffff;
-    border-radius: 14px;
+    background: var(--bg-card);
+    border-radius: var(--radius-lg);
     overflow: hidden;
     border: 1px solid var(--border);
-    box-shadow: var(--card-shadow);
+    box-shadow: var(--shadow-card);
     width: 100%;
     border-collapse: separate;
     border-spacing: 0;
@@ -154,13 +206,13 @@
 #completed_problem_list thead th,
 #technician_list thead th,
 #residents_list thead th {
-    background: #f1f5f9;
+    background: #f8fafc;
     color: var(--text-muted);
-    font-size: 12px;
-    font-weight: 600;
+    font-size: 11px;
+    font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.04em;
-    padding: 14px 16px;
+    letter-spacing: 0.06em;
+    padding: 16px 20px;
     border-bottom: 1px solid var(--border);
     white-space: nowrap;
 }
@@ -170,11 +222,12 @@
 #completed_problem_list tbody td,
 #technician_list tbody td,
 #residents_list tbody td {
-    padding: 14px 16px;
+    padding: 16px 20px;
     font-size: 14px;
     color: var(--text-main);
-    border-bottom: 1px solid #f1f5f9;
+    border-bottom: 1px solid var(--border);
     vertical-align: middle;
+    transition: background 0.15s ease;
 }
 
 #problem_list tbody tr:last-child td,
@@ -190,39 +243,111 @@
 #completed_problem_list tbody tr:hover,
 #technician_list tbody tr:hover,
 #residents_list tbody tr:hover {
-    background: #f5f3ff;
+    background: var(--primary-light);
 }
 
- .view-tech {
-    background: linear-gradient(135deg, #7c3aed, #6d28d9) !important;
+/* Table Button */
+.view-tech {
+    background: var(--primary) !important;
     border: none !important;
-    border-radius: 8px !important;
-    padding: 6px 14px !important;
-    font-size: 13px !important;
+    border-radius: var(--radius-sm) !important;
+    padding: 8px 16px !important;
+    font-size: 12px !important;
     font-weight: 600 !important;
-    color: #fff !important;
-    transition: all 0.2s ease !important;
+    color: var(--text-white) !important;
+    cursor: pointer;
+    transition: var(--transition) !important;
 }
 
 .view-tech:hover {
-    background: linear-gradient(135deg, #6d28d9, #5b21b6) !important;
+    background: var(--primary-hover) !important;
     transform: translateY(-1px);
+    box-shadow: 0 4px 10px var(--primary-glow);
 }
 
+/* Divider */
 hr {
     border: none;
     border-top: 1px solid var(--border);
-    margin: 28px 0;
+    margin: 36px 0;
 }
 
- @media (max-width: 768px) {
+/* ==========================================================================
+   Status Badges (Pills)
+   ========================================================================== */
+.status-pending,
+.p-pending {
+    background: var(--danger-light);
+    color: var(--danger);
+    padding: 6px 12px;
+    border-radius: var(--radius-full);
+    font-weight: 600;
+    font-size: 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.status-progress,
+.p-progress {
+    background: var(--warning-light);
+    color: var(--warning);
+    padding: 6px 12px;
+    border-radius: var(--radius-full);
+    font-weight: 600;
+    font-size: 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.status-completed,
+.p-completed {
+    background: var(--success-light);
+    color: var(--success);
+    padding: 6px 12px;
+    border-radius: var(--radius-full);
+    font-weight: 600;
+    font-size: 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* Overdue & On-Time Indicators */
+.overdue,
+.ontime {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 10px;
+    font-size: 11px;
+    font-weight: 700;
+    border-radius: var(--radius-full);
+    letter-spacing: 0.02em;
+}
+
+.overdue {
+    background-color: var(--danger-light);
+    color: var(--danger);
+}
+
+.ontime {
+    background-color: var(--success-light);
+    color: var(--success);
+}
+
+/* ==========================================================================
+   Responsive Styles
+   ========================================================================== */
+@media (max-width: 768px) {
     .faculty-dashboard {
-        padding: 20px 16px;
+        padding: 24px 16px;
     }
 
     .card-body p {
         flex-direction: column;
-        gap: 2px;
+        align-items: flex-start;
+        gap: 4px;
     }
 
     .card-body p b {
@@ -232,73 +357,6 @@ hr {
     #assign_technician,
     #add_announcement {
         width: 100%;
-        justify-content: center;
         margin-right: 0;
     }
-}
-.status-pending {
-    background: #ff0004;
-    color: white;
-    padding: 4px 10px;
-    border-radius: 15px;
-    font-weight: 600;
-}
-
-.status-progress {
-    background: #ffb012;
-    color: black;
-    padding: 4px 10px;
-    border-radius: 15px;
-    font-weight: 600;
-}
-
-.status-completed {
-    background: #00b718;
-    color: white;
-    padding: 4px 10px;
-    border-radius: 15px;
-    font-weight: 600;
-}
-
-.p-pending {
-    background: #ff0004;
-    color: white;
-    padding: 4px 10px;
-    border-radius: 15px;
-    font-weight: 600;
-}
-
-.p-progress {
-    background: #ffb012;
-    color: black;
-    padding: 4px 10px;
-    border-radius: 15px;
-    font-weight: 600;
-}
-
-.p-completed {
-    background: #00b718;
-    color: white;
-    padding: 4px 10px;
-    border-radius: 15px;
-    font-weight: 600;
-}
-.overdue,
-.ontime {
-    display: inline-block;
-    padding: 2px 6px;
-    font-size: 11px;
-    font-weight: 600;
-    border-radius: 12px;
-    line-height: 1.2;
-}
-
-.overdue {
-    background-color: #ff4d4f;
-    color: white;
-}
-
-.ontime {
-    background-color: #00b718;
-    color: white;
 }

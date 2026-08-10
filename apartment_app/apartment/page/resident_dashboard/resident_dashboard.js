@@ -4,12 +4,9 @@ frappe.pages['resident_dashboard'].on_page_load = function (wrapper) {
     
     let page = frappe.ui.make_app_page({
         parent: wrapper,
-        title: "Resident Dashboard",
+        title: __("Resident Dashboard"),
         single_column: true
     });
-
-    frappe.require("/apartment_app/apartment/page/resident_dashboard/resident_dashboard.css");
-    frappe.require("/apartment_app/apartment/page/resident_dashboard/resident_dashboard.html");
 
     frappe.call({
         method: "apartment_app.apartment.page.resident_dashboard.resident_dashboard.check_resident",
@@ -18,7 +15,7 @@ frappe.pages['resident_dashboard'].on_page_load = function (wrapper) {
                 show_dashboard(page);
                 load_resident_details();
             } else {
-                window.location.href = "/resident/new";
+                frappe.set_route("resident", "new");
             }
         }
     });
@@ -29,50 +26,52 @@ frappe.pages['resident_dashboard'].on_page_load = function (wrapper) {
                 <div id="resident_details"></div>
                 <div class="action-box mb-3">
                     <button id="add_problem" class="btn btn-primary">
-                        <i class="fa fa-plus"></i> Add Problem
+                        <i class="fa fa-plus"></i> ${__('Add Problem')}
                     </button>
                     <button id="track_problem" class="btn btn-success">
-                        <i class="fa fa-list"></i> Track Problems
+                        <i class="fa fa-list"></i> ${__('Track Problems')}
                     </button>
                 </div>
                 <div id="problem_list"></div>
             </div>
         `);
 
-        $("#track_problem").click(function () {
+        $(page.body).on("click", "#track_problem", function () {
             load_problems();
         });
 
-        $("#add_problem").click(function () {
+        $(page.body).on("click", "#add_problem", function () {
             open_add_problem_dialog();
         });
     }
 
     function open_add_problem_dialog() {
         let d = new frappe.ui.Dialog({
-            title: "Add Problem",
+            title: __("Add Problem"),
             fields: [
                 {
-                    label: "Problem",
+                    label: __("Problem Description"),
                     fieldname: "problem",
-                    fieldtype: "Data",
+                    fieldtype: "Small Text",
                     reqd: 1
                 },
                 {
-                    label: "Category",
+                    label: __("Category"),
                     fieldname: "category",
                     fieldtype: "Select",
-                    options: "\nElectrical\nGas\nPlumbing\nCleaning Services\nTech\nOther",
+                    options: ["Electrical", "Gas", "Plumbing", "Cleaning Services", "Tech", "Other"],
                     reqd: 1
                 },
                 {
-                    label: "Complaint Image",
+                    label: __("Complaint Image"),
                     fieldname: "complaint_image",
                     fieldtype: "Attach Image"
                 }
             ],
-            primary_action_label: "Submit",
+            primary_action_label: __("Submit"),
             primary_action(values) {
+                d.get_primary_btn().prop('disabled', true);  
+                
                 frappe.call({
                     method: "apartment_app.apartment.page.resident_dashboard.resident_dashboard.add_problem",
                     args: {
@@ -81,11 +80,15 @@ frappe.pages['resident_dashboard'].on_page_load = function (wrapper) {
                         complaint_image: values.complaint_image || ""
                     },
                     callback: function (r) {
+                        d.get_primary_btn().prop('disabled', false);
                         if (r.message) {
-                            frappe.msgprint(r.message);
+                            frappe.show_alert({ message: r.message, indicator: 'green' });
                             d.hide();
                             load_problems();
                         }
+                    },
+                    error: function() {
+                        d.get_primary_btn().prop('disabled', false);
                     }
                 });
             }
@@ -108,53 +111,57 @@ frappe.pages['resident_dashboard'].on_page_load = function (wrapper) {
                 let total_pages = Math.ceil(total / page_length) || 1;
 
                 let html = `
-                    <h3 class="mt-4">My Problems</h3>
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>Problem ID</th>
-                                <th>Problem</th>
-                                <th>Category</th>
-                                <th>Status</th>
-                                <th>Complaint Date</th>
-                                <th>Working Hours</th>
-                                <th>Completed Date</th>
-                                <th>Overdue</th>
-                                <th>Complaint Image</th>
-                                <th>Completion Image</th>
-                            </tr>
-                        </thead>
-                        <tbody>
+                    <h3 class="mt-4">${__('My Problems')}</h3>
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>${__('ID')}</th>
+                                    <th>${__('Problem')}</th>
+                                    <th>${__('Category')}</th>
+                                    <th>${__('Status')}</th>
+                                    <th>${__('Date')}</th>
+                                    <th>${__('Working Hours')}</th>
+                                    <th>${__('Completed Date')}</th>
+                                    <th>${__('Overdue')}</th>
+                                    <th>${__('Complaint Img')}</th>
+                                    <th>${__('Completion Img')}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
                 `;
 
                 if (problems.length === 0) {
-                    html += `<tr><td colspan="10" class="text-center text-muted">No problems reported yet.</td></tr>`;
+                    html += `<tr><td colspan="10" class="text-center text-muted">${__('No problems reported yet.')}</td></tr>`;
                 } else {
                     problems.forEach(function (p) {
-                        let status_classs = "";
-                        if (p.status === "pending") {
-                            status_classs = "p-pending";
-                        } else if (p.status === "inprogress") {
-                            status_classs = "p-progress";
-                        } else if (p.status === "completed") {
-                            status_classs = "p-completed";
-                        }
+                        let status_class = "";
+                        if (p.status === "pending") status_class = "p-pending";
+                        else if (p.status === "inprogress") status_class = "p-progress";
+                        else if (p.status === "completed") status_class = "p-completed";
 
-                        let status_class = (p.over_due === "YES") ? "status-pending" : "status-completed";
+                         let overdue_badge = (p.over_due === "YES") 
+                            ? `<span class="overdue-yes">${__('YES')}</span>` 
+                            : `<span class="overdue-no">${__('NO')}</span>`;
 
-                       let complaint_img_btn = p.complaint_image ? `<button class="btn btn-sm btn-complaint-img view-img-btn" data-img="${p.complaint_image}">View </button>` : "-";
+                        let complaint_img_btn = p.complaint_image 
+                            ? `<button class="btn btn-xs btn-complaint-img view-img-btn" data-img="${frappe.utils.xss_sanitise(p.complaint_image)}">${__('View')}</button>` 
+                            : "-";
 
-                        let completion_img_btn = p.completion_image  ? `<button class="btn btn-sm btn-completion-img view-img-btn" data-img="${p.completion_image}">View </button>` : "-";
+                        let completion_img_btn = p.completion_image 
+                            ? `<button class="btn btn-xs btn-completion-img view-img-btn" data-img="${frappe.utils.xss_sanitise(p.completion_image)}">${__('View')}</button>` 
+                            : "-";
+
                         html += `
                             <tr>
-                                <td>${p.problem_id || "-"}</td>
-                                <td>${p.problem || "-"}</td>
-                                <td>${p.category || "-"}</td>
-                                <td><span class="${status_classs}">${p.status || "-"}</span></td>
-                                <td>${p.date_time || "-"}</td>
+                                <td>${frappe.utils.xss_sanitise(p.problem_id || "-")}</td>
+                                <td>${frappe.utils.xss_sanitise(p.problem || "-")}</td>
+                                <td>${frappe.utils.xss_sanitise(p.category || "-")}</td>
+                                <td><span class="${status_class}">${frappe.utils.xss_sanitise(p.status || "-")}</span></td>
+                                <td>${p.date_time ? frappe.datetime.str_to_user(p.date_time) : "-"}</td>
                                 <td>${p.total_time ? p.total_time + ' hrs' : "-"}</td>
-                                <td>${p.completed_date || "-"}</td>
-                                <td><span class="${status_class}">${p.over_due || "NO"}</span></td>
+                                <td>${p.completed_date ? frappe.datetime.str_to_user(p.completed_date) : "-"}</td>
+                                <td>${overdue_badge}</td>
                                 <td>${complaint_img_btn}</td>
                                 <td>${completion_img_btn}</td>
                             </tr>
@@ -163,42 +170,43 @@ frappe.pages['resident_dashboard'].on_page_load = function (wrapper) {
                 }
 
                 html += `
-                        </tbody>
-                    </table>
+                            </tbody>
+                        </table>
+                    </div>
                     <div class="d-flex justify-content-between align-items-center mt-3">
                         <div></div>
                         <div>
-                            <button class="btn btn-secondary btn-sm" id="prev_page">Previous</button>
-                            <span class="mx-3 fw-bold">Page ${current_page} of ${total_pages}</span>
-                            <button class="btn btn-primary btn-sm" id="next_page">Next</button>
+                            <button class="btn btn-secondary btn-sm" id="prev_page">${__('Previous')}</button>
+                            <span class="mx-3 fw-bold">${__('Page')} ${current_page} ${__('of')} ${total_pages}</span>
+                            <button class="btn btn-primary btn-sm" id="next_page">${__('Next')}</button>
                         </div>
                     </div>
                 `;
 
                 $("#problem_list").html(html);
 
-                $(".view-img-btn").click(function () {
+                $(".view-img-btn").off("click").on("click", function () {
                     let img_url = $(this).data("img");
                     let img_dialog = new frappe.ui.Dialog({
-                        title: "Image Preview",
+                        title: __("Image Preview"),
                         fields: [
                             {
                                 fieldtype: "HTML",
-                                options: `<div class="text-center"><img src="${img_url}" style="max-width: 100%; height: 300px; object-fit: contain;"></div>`
+                                options: `<div class="text-center"><img src="${img_url}" style="max-width: 100%; max-height: 400px; object-fit: contain;"></div>`
                             }
                         ]
                     });
                     img_dialog.show();
                 });
 
-                $("#prev_page").prop("disabled", current_page === 1).click(function () {
+                $("#prev_page").prop("disabled", current_page === 1).off("click").on("click", function () {
                     if (current_page > 1) {
                         current_page--;
                         load_problems();
                     }
                 });
 
-                $("#next_page").prop("disabled", current_page >= total_pages).click(function () {
+                $("#next_page").prop("disabled", current_page >= total_pages).off("click").on("click", function () {
                     if (current_page < total_pages) {
                         current_page++;
                         load_problems();
@@ -223,16 +231,16 @@ frappe.pages['resident_dashboard'].on_page_load = function (wrapper) {
         let html = `
             <div class="card mb-4">
                 <div class="card-header">
-                    <h4>Resident Information</h4>
+                    <h4>${__('Resident Information')}</h4>
                 </div>
                 <div class="card-body">
-                    <p><b>Name:</b> ${resident.user_name || '-'}</p>
-                    <p><b>Resident ID:</b> ${resident.resident_id || '-'}</p>
-                    <p><b>Apartment:</b> ${resident.apartment_name || '-'}</p>
-                    <p><b>Block:</b> ${resident.block || '-'}</p>
-                    <p><b>Resident No:</b> ${resident.resident_number || '-'}</p>
-                    <p><b>Mobile:</b> ${resident.moble_number || '-'}</p>
-                    <p><b>Email:</b> ${resident.email || '-'}</p>
+                    <p><b>${__('Name')}:</b> ${frappe.utils.xss_sanitise(resident.user_name || '-')}</p>
+                    <p><b>${__('Resident ID')}:</b> ${frappe.utils.xss_sanitise(resident.resident_id || '-')}</p>
+                    <p><b>${__('Apartment')}:</b> ${frappe.utils.xss_sanitise(resident.apartment_name || '-')}</p>
+                    <p><b>${__('Block')}:</b> ${frappe.utils.xss_sanitise(resident.block || '-')}</p>
+                    <p><b>${__('Resident No')}:</b> ${frappe.utils.xss_sanitise(resident.resident_number || '-')}</p>
+                    <p><b>${__('Mobile')}:</b> ${frappe.utils.xss_sanitise(resident.mobile_number || resident.moble_number || '-')}</p>
+                    <p><b>${__('Email')}:</b> ${frappe.utils.xss_sanitise(resident.email || '-')}</p>
                 </div>
             </div>
         `;

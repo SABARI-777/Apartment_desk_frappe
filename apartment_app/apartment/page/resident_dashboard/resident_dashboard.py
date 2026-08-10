@@ -88,13 +88,24 @@ def add_problem(problem,category,complaint_image):
     resident.save(ignore_permissions=True)
 
 
-    faculty_doc = frappe.get_doc("Faculty","FTY-0063")
+    # faculty_doc = frappe.get_doc("Faculty","FTY-0063")
 
-    faculty_doc.add_comment(
-    "Edit",
-    f"RESIDNET {resident_name} ADD problem{row.problem_id} go and assign technicians."
-    )
+    # faculty_doc.add_comment(
+    # "Edit",
+    # f"RESIDNET {resident_name} ADD problem{row.problem_id} go and assign technicians."
+    # )
 
     faculty_doc.save(ignore_permissions=True)
 
-    return "Problem Added Successfully!"
+    faculty_list = frappe.get_all("Faculty", limit=1, pluck="name")
+    if faculty_list:
+        faculty_doc = frappe.get_doc("Faculty", faculty_list[0])
+        faculty_doc.add_comment(
+            "Edit",
+            f"RESIDENT {resident.user_name or resident_name} added problem {row.problem_id}. Please assign a technician."
+        )
+        faculty_doc.save(ignore_permissions=True)
+
+    return _("Problem Added Successfully!")
+
+    # return "Problem Added Successfully!"

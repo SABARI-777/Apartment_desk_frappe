@@ -1,251 +1,311 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap');
+
+/* ==========================================================================
+   Technician Design Tokens & Variables (Precision & Tech Theme)
+   ========================================================================== */
 :root {
-                    --primary: #1e40af;
-                    --primary-dark: #1e3a8a;
-                    --accent: #3b82f6;
-                    --text-main: #0f172a;
-                    --text-muted: #64748b;
-                    --border: #e2e8f0;
-                    --bg: #f8fafc;
-                    --card-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 10px 15px -3px rgba(0,0,0,0.08);
-                    --card-shadow-hover: 0 12px 24px -6px rgba(0,0,0,0.12);
-                }
+    /* Technician Theme Primary Colors */
+    --primary: #2563eb;
+    --primary-hover: #1d4ed8;
+    --primary-light: #eff6ff;
+    --primary-glow: rgba(37, 99, 235, 0.25);
 
-                .technician-dashboard {
-                    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-                    background: var(--bg);
-                    min-height: 100vh;
-                    padding: 32px 28px;
-                    color: var(--text-main);
-                }
+    /* Header Theme: Dark Slate / Technical Vibe */
+    --bg-header: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
 
-                .technician-dashboard h1 {
-                    font-family: 'Plus Jakarta Sans', sans-serif;
-                    font-size: 24px;
-                    font-weight: 700;
-                    color: var(--text-main);
-                    margin-bottom: 24px;
-                    letter-spacing: -0.03em;
-                }
+    /* Status Indicators */
+    --success: #10b981;
+    --success-light: #ecfdf5;
+    
+    --warning: #d97706;
+    --warning-light: #fffbeb;
+    
+    --danger: #ef4444;
+    --danger-light: #fef2f2;
 
-                .technician-dashboard h3 {
-                    font-family: 'Plus Jakarta Sans', sans-serif;
-                    font-size: 17px;
-                    font-weight: 600;
-                    color: var(--text-main);
-                    margin: 28px 0 14px 0;
-                    letter-spacing: -0.02em;
-                }
+    /* Neutrals */
+    --text-main: #0f172a;
+    --text-muted: #64748b;
+    --text-white: #ffffff;
+    
+    --bg-main: #f8fafc;
+    --bg-card: #ffffff;
+    --border: #e2e8f0;
 
-                .card.mb-4 {
-                    background: #ffffff;
-                    border-radius: 16px;
-                    border: 1px solid var(--border);
-                    box-shadow: var(--card-shadow);
-                    margin-bottom: 28px;
-                    overflow: hidden;
-                    transition: box-shadow 0.25s ease;
-                }
+    /* Shadows & Effects */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-card: 0 4px 20px -2px rgba(15, 23, 42, 0.06), 0 2px 6px -1px rgba(15, 23, 42, 0.03);
+    --shadow-hover: 0 20px 25px -5px rgba(15, 23, 42, 0.1), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+    
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-full: 9999px;
 
-                .card.mb-4:hover {
-                    box-shadow: var(--card-shadow-hover);
-                }
-
-                .card-header {
-                    background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%);
-                    color: #ffffff;
-                    padding: 16px 22px;
-                    border-bottom: none;
-                }
-
-                .card-header h4 {
-                    margin: 0;
-                    font-family: 'Plus Jakarta Sans', sans-serif;
-                    font-size: 16px;
-                    font-weight: 600;
-                    color: #ffffff;
-                }
-
-                .card-body {
-                    padding: 22px;
-                }
-
-                .card-body p {
-                    margin-bottom: 12px;
-                    font-size: 14.5px;
-                    display: flex;
-                    align-items: baseline;
-                    gap: 10px;
-                }
-
-                .card-body p:last-child {
-                    margin-bottom: 0;
-                }
-
-                .card-body p b {
-                    min-width: 120px;
-                    font-weight: 600;
-                    color: var(--text-muted);
-                    font-size: 12.5px;
-                    text-transform: uppercase;
-                    letter-spacing: 0.04em;
-                }
-
-                #update_status {
-                    background: linear-gradient(135deg, #1e40af, #1e3a8a);
-                    color: #ffffff;
-                    border: none;
-                    border-radius: 12px;
-                    padding: 12px 26px;
-                    font-family: 'Inter', sans-serif;
-                    font-weight: 600;
-                    font-size: 14.5px;
-                    display: inline-flex;
-                    align-items: center;
-                    gap: 8px;
-                    box-shadow: 0 2px 6px rgba(30, 64, 175, 0.3);
-                    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-                    margin-bottom: 20px;
-                }
-
-                #update_status:hover {
-                    background: linear-gradient(135deg, #1e3a8a, #172554);
-                    transform: translateY(-2px);
-                    box-shadow: 0 8px 20px -4px rgba(30, 64, 175, 0.4);
-                }
-
-                #problem_list table,
-                #history_list table {
-                    background: #ffffff;
-                    border-radius: 14px;
-                    overflow: hidden;
-                    border: 1px solid var(--border);
-                    box-shadow: var(--card-shadow);
-                    width: 100%;
-                    border-collapse: separate;
-                    border-spacing: 0;
-                }
-
-                #problem_list thead th,
-                #history_list thead th {
-                    background: #f1f5f9;
-                    color: var(--text-muted);
-                    font-size: 12px;
-                    font-weight: 600;
-                    text-transform: uppercase;
-                    letter-spacing: 0.04em;
-                    padding: 14px 16px;
-                    border-bottom: 1px solid var(--border);
-                    white-space: nowrap;
-                }
-
-                #problem_list tbody td,
-                #history_list tbody td {
-                    padding: 14px 16px;
-                    font-size: 14px;
-                    color: var(--text-main);
-                    border-bottom: 1px solid #f1f5f9;
-                    vertical-align: middle;
-                }
-
-                #problem_list tbody tr:last-child td,
-                #history_list tbody tr:last-child td {
-                    border-bottom: none;
-                }
-
-                #problem_list tbody tr:hover,
-                #history_list tbody tr:hover {
-                    background: #eff6ff;
-                }
-
-                hr {
-                    border: none;
-                    border-top: 1px solid var(--border);
-                    margin: 28px 0;
-                }
-
-                @media (max-width: 768px) {
-                    .technician-dashboard {
-                        padding: 20px 16px;
-                    }
-                    .card-body p {
-                        flex-direction: column;
-                        gap: 2px;
-                    }
-                    .card-body p b {
-                        min-width: auto;
-                    }
-                    #update_status {
-                        width: 100%;
-                        justify-content: center;
-                    }
-                }
-
-.status-pending {
-    background: #ff0004;
-    color: white;
-    padding: 4px 10px;
-    border-radius: 20px;
-    font-weight: 600;
+    --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.status-progress {
-    background: #ffb012;
-    color: black;
-    padding: 4px 10px;
-    border-radius: 20px;
-    font-weight: 600;
+/* ==========================================================================
+   Dashboard Main Container
+   ========================================================================== */
+.technician-dashboard {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: var(--bg-main);
+    min-height: 100vh;
+    padding: 40px 32px;
+    color: var(--text-main);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
 }
 
-.status-completed {
-    background: #00b718;
-    color: white;
-    padding: 4px 10px;
-    border-radius: 20px;
-    font-weight: 600;
+.technician-dashboard h1 {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--text-main);
+    margin-bottom: 32px;
+    letter-spacing: -0.03em;
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }
 
+.technician-dashboard h3 {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-main);
+    margin: 36px 0 16px 0;
+    letter-spacing: -0.02em;
+}
+
+/* ==========================================================================
+   Card Components
+   ========================================================================== */
+.card.mb-4 {
+    background: var(--bg-card);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-card);
+    margin-bottom: 32px;
+    overflow: hidden;
+    transition: var(--transition);
+}
+
+.card.mb-4:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-2px);
+}
+
+.card-header {
+    background: var(--bg-header);
+    color: var(--text-white);
+    padding: 20px 24px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.card-header h4 {
+    margin: 0;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-white);
+    letter-spacing: -0.01em;
+}
+
+.card-body {
+    padding: 24px;
+}
+
+.card-body p {
+    margin-bottom: 16px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.card-body p:last-child {
+    margin-bottom: 0;
+}
+
+.card-body p b {
+    min-width: 120px;
+    font-weight: 600;
+    color: var(--text-muted);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+/* ==========================================================================
+   Update Status Action Button
+   ========================================================================== */
+#update_status {
+    background: var(--primary);
+    color: var(--text-white);
+    border: none;
+    border-radius: var(--radius-md);
+    padding: 12px 24px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px var(--primary-glow);
+    transition: var(--transition);
+    margin-bottom: 24px;
+}
+
+#update_status:hover {
+    background: var(--primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px var(--primary-glow);
+}
+
+/* ==========================================================================
+   Tables
+   ========================================================================== */
+#problem_list table,
+#history_list table {
+    background: var(--bg-card);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-card);
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+#problem_list thead th,
+#history_list thead th {
+    background: #f8fafc;
+    color: var(--text-muted);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+}
+
+#problem_list tbody td,
+#history_list tbody td {
+    padding: 16px 20px;
+    font-size: 14px;
+    color: var(--text-main);
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+    transition: background 0.15s ease;
+}
+
+#problem_list tbody tr:last-child td,
+#history_list tbody tr:last-child td {
+    border-bottom: none;
+}
+
+#problem_list tbody tr:hover,
+#history_list tbody tr:hover {
+    background: var(--primary-light);
+}
+
+/* Divider */
+hr {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 36px 0;
+}
+
+/* ==========================================================================
+   Status Badges (Pills)
+   ========================================================================== */
+.status-pending,
 .p-pending {
-    background: #ff0004;
-    color: white;
-    padding: 4px 10px;
-    border-radius: 20px;
+    background: var(--danger-light);
+    color: var(--danger);
+    padding: 6px 14px;
+    border-radius: var(--radius-full);
     font-weight: 600;
+    font-size: 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
 }
 
+.status-progress,
 .p-progress {
-    background: #ffb012;
-    color: black;
-    padding: 4px 10px;
-    border-radius: 20px;
+    background: var(--warning-light);
+    color: var(--warning);
+    padding: 6px 14px;
+    border-radius: var(--radius-full);
     font-weight: 600;
+    font-size: 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
 }
 
+.status-completed,
 .p-completed {
-    background: #00b718;
-    color: white;
-    padding: 4px 10px;
-    border-radius: 20px;
+    background: var(--success-light);
+    color: var(--success);
+    padding: 6px 14px;
+    border-radius: var(--radius-full);
     font-weight: 600;
+    font-size: 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
 }
+
+/* Overdue & On-Time Indicators */
 .overdue,
 .ontime {
-    display: flex;
+    display: inline-flex;
     justify-content: center; 
     align-items: center;       
-    padding: 2px 10px;
+    padding: 6px 14px;
     font-size: 11px;
-    font-weight: 600;
-    border-radius: 12px;
-    min-width: 110px;          
-    min-height: 42px;         
+    font-weight: 700;
+    border-radius: var(--radius-full);
+    letter-spacing: 0.02em;
+    min-width: 90px;
 }
 
 .overdue {
-    background-color: #ff4d4f;
-    color: white;
+    background-color: var(--danger-light);
+    color: var(--danger);
 }
 
 .ontime {
-    background-color: #00b718;
-    color: white;
+    background-color: var(--success-light);
+    color: var(--success);
+}
+
+/* ==========================================================================
+   Responsive Styles
+   ========================================================================== */
+@media (max-width: 768px) {
+    .technician-dashboard {
+        padding: 24px 16px;
+    }
+
+    .card-body p {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+    }
+
+    .card-body p b {
+        min-width: auto;
+    }
+
+    #update_status {
+        width: 100%;
+    }
 }
