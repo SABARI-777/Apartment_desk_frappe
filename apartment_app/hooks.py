@@ -260,7 +260,7 @@ app_license = "mit"
 # ]
 scheduler_events = {
     "cron": {
-        "0 9 * * *": [
+        "0 9 * * 1": [
             "apartment_app.tasks.send_daily_faculty_report",
             "apartment_app.tasks.check_pending",
             "apartment_app.tasks.overdue_check",

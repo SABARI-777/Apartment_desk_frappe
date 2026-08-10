@@ -122,7 +122,7 @@ frappe.pages['resident_dashboard'].on_page_load = function (wrapper) {
                                     <th>${__('Status')}</th>
                                     <th>${__('Date')}</th>
                                     <th>${__('Working Hours')}</th>
-                                    <th>${__('Completed Date')}</th>
+                                    <th>${__('Lastupdated Date')}</th>
                                     <th>${__('Overdue')}</th>
                                     <th>${__('Complaint Img')}</th>
                                     <th>${__('Completion Img')}</th>

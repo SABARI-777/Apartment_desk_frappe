@@ -161,7 +161,7 @@ frappe.pages['technician_dashboard'].on_page_load = function (wrapper) {
             } else if (p.status === "completed") {
                 status_classs = "p-completed";
             }
-
+            
             html += `
                 <tr>
                     <td>${p.problem_id}</td>

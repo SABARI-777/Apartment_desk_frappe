@@ -207,7 +207,7 @@ frappe.pages['faculty_dashboard'].on_page_load = function (wrapper) {
                     <tr>
                         <td>${safe_sanitize(t.name1)}</td>
                         <td>${safe_sanitize(t.technician_id)}</td>
-                        <td>${safe_sanitize(t.category)}</td>
+                        <td>${t.category.map(c => c.skill).join(", ")}</td>
                         <td>${safe_sanitize(t.phone)}</td>
                         <td>${safe_sanitize(t.email)}</td>
                         <td>

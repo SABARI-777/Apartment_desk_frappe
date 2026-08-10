@@ -146,7 +146,6 @@ def update_task(problem_id, resident, status,completion_image):
             row.over_due = "YES" if is_over_due else "NO"
 
             break
-    print(is_over_due)
 
     resident_doc.add_comment(
     "Edit",
